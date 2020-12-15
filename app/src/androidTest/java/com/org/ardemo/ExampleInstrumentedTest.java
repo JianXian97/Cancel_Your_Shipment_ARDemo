@@ -1,6 +1,8 @@
 package com.org.ardemo;
 
 import android.content.Context;
+
+import androidx.test.core.app.ApplicationProvider;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
@@ -19,8 +21,8 @@ public class ExampleInstrumentedTest {
     @Test
     public void useAppContext() {
         // Context of the app under test.
-        Context appContext = InstrumentationRegistry.getTargetContext();
+        Context appContext = ApplicationProvider.getApplicationContext();
 
-        assertEquals("com.mandt.buildar", appContext.getPackageName());
+        assertEquals("com.org.ardemo", appContext.getPackageName());
     }
 }

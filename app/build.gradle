@@ -4,7 +4,7 @@ apply plugin: 'com.google.ar.sceneform.plugin'
 android {
     compileSdkVersion 29
     defaultConfig {
-        applicationId "com.mandt.buildar"
+        applicationId "com.org.ardemo"
         minSdkVersion 24
         targetSdkVersion 29
         versionCode 1

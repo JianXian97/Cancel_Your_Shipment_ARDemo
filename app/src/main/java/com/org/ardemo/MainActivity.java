@@ -62,11 +62,10 @@ public class MainActivity extends AppCompatActivity {
     private static final double MIN_OPENGL_VERSION = 3.0;
     private boolean installRequested;
     ImageButton removeButton, addObjectButton, takeImageButton, openGalleryButton, earthIcon, paperAirplaneIcon, chairIcon, addToCartMenu;
-    Button variationList;
     ArFragment arFragment;
     ImageView selectedProduct, shopPicture;
     TextView price, stock, shopName, shopLastSeen, shopProductCount, shopRating, shopChatResponse;
-    LinearLayout addToCartMenuLayout, addToCartMenuLayoutSlider, objChooser;
+    LinearLayout addToCartMenuLayout, addToCartMenuLayoutSlider, objChooser, variationPanel;
     RelativeLayout shopDetails;
     ModelRenderable selectedRenderable;
     private boolean capturePicture = false;
@@ -103,8 +102,8 @@ public class MainActivity extends AppCompatActivity {
         selectedProduct = findViewById(R.id.selectedProduct);
         price = findViewById(R.id.price);
         stock = findViewById(R.id.stockCount);
-        variationList = findViewById(R.id.variationList);
-        variationList.setVisibility(View.INVISIBLE);
+        variationPanel = findViewById(R.id.variationPanel);
+        variationPanel.setVisibility(View.INVISIBLE);
         addToCartMenuLayout = findViewById(R.id.addToCartMenuLayout);
         addToCartMenuLayoutSlider = findViewById(R.id.addToCartMenuLayoutSlider);
         shopPicture = findViewById(R.id.shopPicture);
@@ -328,7 +327,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void activateObject(String Object, int position){
         shopDetails.setVisibility(View.VISIBLE);
-        variationList.setVisibility(View.VISIBLE);
+        variationPanel.setVisibility(View.VISIBLE);
         addToCartMenuLayoutSlider.setVisibility(View.VISIBLE);
         //Toast.makeText(MainActivity.this, Object + " Object Activated", Toast.LENGTH_SHORT).show();
         selectedProduct.setImageResource(productURI[position]);
@@ -448,6 +447,9 @@ public class MainActivity extends AppCompatActivity {
     public ArrayList<Uri> getImgUriList(){
         ArrayList<Uri> list = new ArrayList<>();
         File dir = new File(getFilesDir().getAbsolutePath() + File.separator + "/images");
+
+        if(!dir.exists()) dir.mkdirs();
+
         for(File f : dir.listFiles()) {
             if (f.isFile()) {
                 list.add(Uri.fromFile(f));

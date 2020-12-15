@@ -276,6 +276,7 @@
                 android:orientation="vertical"
                 android:paddingBottom="2dp">
                 <TextView
+                    android:id="@+id/variationText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
@@ -289,8 +290,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:text="None"
-                    android:textSize="8sp"
-                    android:visibility="gone"/>
+                    android:textSize="8sp"/>
             </LinearLayout>
             <!-- Shop Details -->
             <RelativeLayout
