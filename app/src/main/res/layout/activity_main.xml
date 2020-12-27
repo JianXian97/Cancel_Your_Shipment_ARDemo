@@ -111,7 +111,7 @@
             android:layout_height="match_parent"
             android:gravity="center|top"
             android:background="@drawable/rectangle"
-            android:backgroundTint="#DC593B"
+            android:backgroundTint="@color/shopeeOrange"
             android:textSize="16sp"
             android:layout_marginTop="330dp">
 
