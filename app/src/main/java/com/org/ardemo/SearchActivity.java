@@ -32,18 +32,23 @@ import java.util.ArrayList;
 
 public class SearchActivity extends AppCompatActivity{
 
-    private boolean isFilterFragmentShown = false;
     Fragment filterFragment;
     FragmentManager fragmentManager;
     int width;
-    View backgroundBlur;
     private String[] filelist;
+    ArrayList<shop> ShopList = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.search_result_layout);
 
+        shop shopA = new shop("company_logo_1.png", "Houze", 17, 420,73,4.8);
+        shop shopB = new shop("company_logo_2.png", "Repoe", 23, 982,99,4.7);
+        shop shopC = new shop("company_logo_3.png", "Origami", 10, 77,89,4.5);
 
+        ShopList.add(shopA);
+        ShopList.add(shopB);
+        ShopList.add(shopC);
         AssetManager aMan = this.getAssets();
         try {
             filelist = aMan.list("product-images");
@@ -55,7 +60,7 @@ public class SearchActivity extends AppCompatActivity{
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         width = displayMetrics.widthPixels;
-        backgroundBlur = findViewById(R.id.filterFragmentLayoutBlur);
+
         Spinner dropdown = findViewById(R.id.sortDropdown);
         //create a list of items for the spinner.
         String[] items = new String[]{"Sort By", "Relevance", "Latest","Top Sales","Price"};
@@ -68,8 +73,6 @@ public class SearchActivity extends AppCompatActivity{
         filterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                isFilterFragmentShown = true;
-                backgroundBlur.setVisibility(View.VISIBLE);
                 filterFragment = new FilterFragment();
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.filterFragmentLayout, filterFragment, filterFragment.getClass().getSimpleName()).addToBackStack(null).commit();
@@ -87,46 +90,11 @@ public class SearchActivity extends AppCompatActivity{
         recyclerView.setAdapter(searchResultAdapter);
     }
 
-    @Override
-    public boolean onTouchEvent ( MotionEvent event ){
-        // I only care if the event is an UP action
-        if ( event.getAction () == MotionEvent.ACTION_UP )
-        {
-            Log.d("TEST", "X " + event.getX() + " Y" + event.getY());
-            Log.d("TEST 2", "X " + ((event.getX() + width/2) % width) + " Y" + event.getY());
-            //and only is the ListFragment shown.
-            if (isFilterFragmentShown)
-            {
-                // create a rect for storing the fragment window rect
-                Rect r = new Rect( 0, 0, 0, 0 );
-                // retrieve the fragment's windows rect
-                filterFragment.getView().getHitRect(r);
-                // check if the event position is inside the window rect
-//                boolean intersects = r.contains ((int)(event.getX()), (int) event.getY());
-                boolean intersects = r.contains ((int)(width - event.getX()), (int) event.getY());
-
-                // if the event is not inside then we can close the fragment
-                if (!intersects) {
-                    fragmentManager = getSupportFragmentManager();
-                    FragmentTransaction fragmentTransaction;
-                    fragmentTransaction = fragmentManager.beginTransaction();
-                    fragmentTransaction.remove(filterFragment).commit();
-                    backgroundBlur.setVisibility(View.INVISIBLE);
-                    isFilterFragmentShown = false;
-
-                    // notify that we consumed this event
-                    return true;
-                }
-            }
-        }
-        //let the system handle the event
-        return super.onTouchEvent ( event );
-    }
-
     private ArrayList<Product> prepareData(){
         ArrayList<Product> productLists = new ArrayList<>();
         for(int i = 0; i< filelist.length; i++){
             Product product = new Product("HOUZE - Diato", filelist[i], 11.80, 5.90, true, false, 4.0f,1800, true);
+            product.setShop(ShopList.get(i));
             productLists.add(product);
         }
         return productLists;

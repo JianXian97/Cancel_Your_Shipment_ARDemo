@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.AssetManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.net.Uri;
 import android.os.Build;
@@ -51,6 +53,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -79,9 +82,9 @@ public class MainActivity extends AppCompatActivity {
     int[] productURI = {R.drawable.paper_airplane,R.drawable.earth,R.drawable.chair};
     String[] productPrice = {"100.50","70.90","900.00"};
     String[] productStock = {"420","18","7"};
-    shop shopA = new shop(R.drawable.company_logo_1, "Houze", 17, 420,73,4.8);
-    shop shopB = new shop(R.drawable.company_logo_2, "Repoe", 23, 982,99,4.7);
-    shop shopC = new shop(R.drawable.company_logo_3, "Origami", 10, 77,89,4.5);
+    shop shopA = new shop("company_logo_1", "Houze", 17, 420,73,4.8);
+    shop shopB = new shop("company_logo_2", "Repoe", 23, 982,99,4.7);
+    shop shopC = new shop("company_logo_3", "Origami", 10, 77,89,4.5);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -179,7 +182,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                selectedRenderable = listOfRenderable.get(0);
                activateObject("Paper Airplane",0);
-               shopC.displayInformation(shopPicture,shopName,shopLastSeen,shopProductCount,shopRating,shopChatResponse);
+               displayShopInformation(shopC,shopPicture,shopName,shopLastSeen,shopProductCount,shopRating,shopChatResponse);
             }
         });
         earthIcon.setOnClickListener(new View.OnClickListener() {
@@ -187,7 +190,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 selectedRenderable = listOfRenderable.get(1);
                 activateObject("Earth",1);
-                shopB.displayInformation(shopPicture,shopName,shopLastSeen,shopProductCount,shopRating,shopChatResponse);
+                displayShopInformation(shopB,shopPicture,shopName,shopLastSeen,shopProductCount,shopRating,shopChatResponse);
             }
         });
         chairIcon.setOnClickListener(new View.OnClickListener() {
@@ -195,7 +198,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 selectedRenderable = listOfRenderable.get(2);
                 activateObject("Chair",2);
-                shopA.displayInformation(shopPicture,shopName,shopLastSeen,shopProductCount,shopRating,shopChatResponse);
+                displayShopInformation(shopA,shopPicture,shopName,shopLastSeen,shopProductCount,shopRating,shopChatResponse);
             }
         });
         takeImageButton.setOnClickListener(new View.OnClickListener() {
@@ -457,5 +460,21 @@ public class MainActivity extends AppCompatActivity {
         }
         return list;
     }
-
+    private void displayShopInformation(shop shop, ImageView shopPicture, TextView shopName, TextView shopLastSeen, TextView shopProductCount, TextView shopRating, TextView shopChatResponse){
+        AssetManager assetManager = getAssets();
+        try{
+            String path = "shop-images/"+shop.picture;
+            InputStream is = assetManager.open(path);
+            Bitmap bitmap = BitmapFactory.decodeStream(is);
+            shopPicture.setImageBitmap(bitmap);
+            is.close();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        shopName.setText(shop.name);
+        shopLastSeen.setText("Active " + Integer.toString(shop.lastSeen) + " minutes ago");
+        shopProductCount.setText(Integer.toString(shop.productCount));
+        shopChatResponse.setText(Integer.toString(shop.chatResponse)+"%");
+        shopRating.setText(Double.toString(shop.rating));
+    }
 }

@@ -3,343 +3,354 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="#fafafa">
-
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Filter Search"
-        android:textStyle="bold"
-        android:textSize="28sp"
-        android:textColor="#000"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginStart="8dp"/>
-
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/ARLikedButtons"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/title"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <Button
-            android:id="@+id/ARFilterButton"
-            android:layout_width="0dp"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintWidth_percent="0.9"
+        android:background="#fafafa">
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintWidth_percent="0.4"
+            android:text="Filter Search"
+            android:textStyle="bold"
+            android:textSize="28sp"
+            android:textColor="#000"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/LikedFilterButton"
-            android:text="AR"
-            android:drawableStart="@drawable/ic_ar_icon"
-            android:drawablePadding="-24dp"/>
+            android:layout_marginStart="8dp"/>
 
-        <Button
-            android:id="@+id/LikedFilterButton"
-            android:layout_width="0dp"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/ARLikedButtons"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintWidth_percent="0.4"
-            app:layout_constraintStart_toEndOf="@id/ARFilterButton"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:text="Liked"
-            android:drawableStart="@drawable/ic_heart_icon"
-            android:drawablePadding="-24dp"/>
+            app:layout_constraintTop_toBottomOf="@id/title"
+            app:layout_constraintStart_toStartOf="parent">
 
+            <Button
+                android:id="@+id/ARFilterButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintWidth_percent="0.4"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/LikedFilterButton"
+                android:text="AR"
+                android:drawableStart="@drawable/ic_ar_icon"
+                android:drawablePadding="-24dp"/>
+
+            <Button
+                android:id="@+id/LikedFilterButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintWidth_percent="0.4"
+                app:layout_constraintStart_toEndOf="@id/ARFilterButton"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:text="Liked"
+                android:drawableStart="@drawable/ic_heart_icon"
+                android:drawablePadding="-24dp"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/categories"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Categories"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:textColor="#000"
+            android:layout_margin="8dp"
+            app:layout_constraintTop_toBottomOf="@id/ARLikedButtons"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="8dp"/>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/categoriesPanel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/categories"
+            app:layout_constraintStart_toStartOf="parent">
+            <Button
+                android:id="@+id/toysButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintWidth_percent="0.45"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/FurnitureButton"
+                android:inputType="text"
+                android:text="Toys, Kids &amp; Bab... (95K+)" />
+
+
+            <Button
+                android:id="@+id/FurnitureButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintWidth_percent="0.45"
+                app:layout_constraintStart_toEndOf="@id/toysButton"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:inputType="text"
+                android:text="Furniture / Others (54K+)" />
+
+            <Button
+                android:id="@+id/ShoeButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintWidth_percent="0.45"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/toysButton"
+                app:layout_constraintEnd_toStartOf="@id/CabinetButton"
+                android:inputType="text"
+                android:text="Show Storage (36K+)" />
+
+
+            <Button
+                android:id="@+id/CabinetButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintWidth_percent="0.45"
+                app:layout_constraintStart_toEndOf="@id/ShoeButton"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/FurnitureButton"
+                android:inputType="text"
+                android:text="Cabinet &amp; Drawer (34K+)" />
+
+            <Button
+                android:id="@+id/ShowMoreButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintWidth_percent="0.35"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/CabinetButton"
+                android:textSize="12sp"
+                android:textColor="#70000000"
+                android:drawableRight="@drawable/ic_baseline_keyboard_arrow_down_24"
+                android:inputType="text"
+                android:text="Show More" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <TextView
+            android:id="@+id/ShippedFrom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Shipped From"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:textColor="#000"
+            android:layout_margin="8dp"
+            app:layout_constraintTop_toBottomOf="@id/categoriesPanel"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="8dp"/>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/ShippedFromPanel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/ShippedFrom"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <Button
+                android:id="@+id/DomesticButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintWidth_percent="0.45"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/OverseasButton"
+                android:inputType="text"
+                android:text="Domestic" />
+
+
+            <Button
+                android:id="@+id/OverseasButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintWidth_percent="0.45"
+                app:layout_constraintStart_toEndOf="@id/DomesticButton"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:inputType="text"
+                android:text="Overseas" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/ShippingOption"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Shipped From"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:textColor="#000"
+            android:layout_margin="8dp"
+            app:layout_constraintTop_toBottomOf="@id/ShippedFromPanel"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="8dp"/>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/ShippingOptionPanel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/ShippingOption"
+            app:layout_constraintStart_toStartOf="parent">
+            <Button
+                android:id="@+id/JTExpress"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintWidth_percent="0.45"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/NinjaVan_home"
+                android:inputType="text"
+                android:text="J&amp;T Express"/>
+
+
+            <Button
+                android:id="@+id/NinjaVan_home"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintWidth_percent="0.45"
+                app:layout_constraintStart_toEndOf="@id/JTExpress"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:inputType="text"
+                android:text="Ninja Van Home Deliv..." />
+
+            <Button
+                android:id="@+id/NinjaVan_self"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintWidth_percent="0.45"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/JTExpress"
+                app:layout_constraintEnd_toStartOf="@id/UrbanFox"
+                android:inputType="text"
+                android:text="Ninja Van Self Collection" />
+
+
+            <Button
+                android:id="@+id/UrbanFox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintWidth_percent="0.45"
+                app:layout_constraintStart_toEndOf="@id/NinjaVan_self"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/NinjaVan_home"
+                android:inputType="text"
+                android:text="UrbanFox" />
+
+            <Button
+                android:id="@+id/ShowMoreButton2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintWidth_percent="0.35"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/UrbanFox"
+                android:textSize="12sp"
+                android:textColor="#70000000"
+                android:drawableRight="@drawable/ic_baseline_keyboard_arrow_down_24"
+                android:inputType="text"
+                android:text="Show More" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/PriceRange"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Price Range ($)"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:textColor="#000"
+            android:layout_margin="8dp"
+            app:layout_constraintTop_toBottomOf="@id/ShippingOptionPanel"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="8dp"/>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/PricePanel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/PriceRange"
+            android:paddingTop="10dp">
+
+
+            <EditText
+                android:id="@+id/MinPriceText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintWidth_percent="0.4"
+                android:text="MIN"
+                android:gravity="center"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/MaxPriceText"
+                app:layout_constraintTop_toTopOf="parent"
+                android:padding="8dp"
+                android:background="#FFF"/>
+
+            <EditText
+                android:id="@+id/MaxPriceText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintWidth_percent="0.4"
+                android:text="MAX"
+                android:gravity="center"
+                app:layout_constraintStart_toEndOf="@id/MinPriceText"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:padding="8dp"
+                android:background="#FFF"/>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#fff"
+            app:layout_constraintBottom_toBottomOf="parent">
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/ResetButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintWidth_percent="0.4"
+                android:text="Reset"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/ApplyButton"
+                app:cornerRadius="0dp"
+                android:backgroundTint="#ffffff"
+                app:strokeWidth="1dp"
+                android:textColor="@color/shopeeRed"
+                app:strokeColor="@color/shopeeRed"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/ApplyButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintWidth_percent="0.4"
+                android:text="Apply"
+                app:layout_constraintStart_toEndOf="@id/ResetButton"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:backgroundTint="@color/shopeeRed"
+                app:cornerRadius="0dp"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
-    <TextView
-        android:id="@+id/categories"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Categories"
-        android:textStyle="bold"
-        android:textSize="18sp"
-        android:textColor="#000"
-        android:layout_margin="8dp"
-        app:layout_constraintTop_toBottomOf="@id/ARLikedButtons"
+    <View
+        android:id="@+id/filterFragmentLayoutBlur"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        app:layout_constraintWidth_percent="0.1"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginStart="8dp"/>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/categoriesPanel"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/categories"
-        app:layout_constraintStart_toStartOf="parent">
-        <Button
-            android:id="@+id/toysButton"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintWidth_percent="0.45"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/FurnitureButton"
-            android:inputType="text"
-            android:text="Toys, Kids &amp; Bab... (95K+)" />
-
-
-        <Button
-            android:id="@+id/FurnitureButton"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintWidth_percent="0.45"
-            app:layout_constraintStart_toEndOf="@id/toysButton"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:inputType="text"
-            android:text="Furniture / Others (54K+)" />
-
-        <Button
-            android:id="@+id/ShoeButton"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintWidth_percent="0.45"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/toysButton"
-            app:layout_constraintEnd_toStartOf="@id/CabinetButton"
-            android:inputType="text"
-            android:text="Show Storage (36K+)" />
-
-
-        <Button
-            android:id="@+id/CabinetButton"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintWidth_percent="0.45"
-            app:layout_constraintStart_toEndOf="@id/ShoeButton"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/FurnitureButton"
-            android:inputType="text"
-            android:text="Cabinet &amp; Drawer (34K+)" />
-
-        <Button
-            android:id="@+id/ShowMoreButton"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintWidth_percent="0.35"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/CabinetButton"
-            android:textSize="12sp"
-            android:textColor="#70000000"
-            android:drawableRight="@drawable/ic_baseline_keyboard_arrow_down_24"
-            android:inputType="text"
-            android:text="Show More" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-    <TextView
-        android:id="@+id/ShippedFrom"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Shipped From"
-        android:textStyle="bold"
-        android:textSize="18sp"
-        android:textColor="#000"
-        android:layout_margin="8dp"
-        app:layout_constraintTop_toBottomOf="@id/categoriesPanel"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginStart="8dp"/>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/ShippedFromPanel"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/ShippedFrom"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <Button
-            android:id="@+id/DomesticButton"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintWidth_percent="0.45"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/OverseasButton"
-            android:inputType="text"
-            android:text="Domestic" />
-
-
-        <Button
-            android:id="@+id/OverseasButton"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintWidth_percent="0.45"
-            app:layout_constraintStart_toEndOf="@id/DomesticButton"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:inputType="text"
-            android:text="Overseas" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <TextView
-        android:id="@+id/ShippingOption"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Shipped From"
-        android:textStyle="bold"
-        android:textSize="18sp"
-        android:textColor="#000"
-        android:layout_margin="8dp"
-        app:layout_constraintTop_toBottomOf="@id/ShippedFromPanel"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginStart="8dp"/>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/ShippingOptionPanel"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/ShippingOption"
-        app:layout_constraintStart_toStartOf="parent">
-        <Button
-            android:id="@+id/JTExpress"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintWidth_percent="0.45"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/NinjaVan_home"
-            android:inputType="text"
-            android:text="J&amp;T Express"/>
-
-
-        <Button
-            android:id="@+id/NinjaVan_home"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintWidth_percent="0.45"
-            app:layout_constraintStart_toEndOf="@id/JTExpress"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:inputType="text"
-            android:text="Ninja Van Home Deliv..." />
-
-        <Button
-            android:id="@+id/NinjaVan_self"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintWidth_percent="0.45"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/JTExpress"
-            app:layout_constraintEnd_toStartOf="@id/UrbanFox"
-            android:inputType="text"
-            android:text="Ninja Van Self Collection" />
-
-
-        <Button
-            android:id="@+id/UrbanFox"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintWidth_percent="0.45"
-            app:layout_constraintStart_toEndOf="@id/NinjaVan_self"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/NinjaVan_home"
-            android:inputType="text"
-            android:text="UrbanFox" />
-
-        <Button
-            android:id="@+id/ShowMoreButton2"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintWidth_percent="0.35"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/UrbanFox"
-            android:textSize="12sp"
-            android:textColor="#70000000"
-            android:drawableRight="@drawable/ic_baseline_keyboard_arrow_down_24"
-            android:inputType="text"
-            android:text="Show More" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <TextView
-        android:id="@+id/PriceRange"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Price Range ($)"
-        android:textStyle="bold"
-        android:textSize="18sp"
-        android:textColor="#000"
-        android:layout_margin="8dp"
-        app:layout_constraintTop_toBottomOf="@id/ShippingOptionPanel"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginStart="8dp"/>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/PricePanel"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/PriceRange"
-        android:paddingTop="10dp">
-
-
-        <EditText
-            android:id="@+id/MinPriceText"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintWidth_percent="0.4"
-            android:text="MIN"
-            android:gravity="center"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/MaxPriceText"
-            app:layout_constraintTop_toTopOf="parent"
-            android:padding="8dp"
-            android:background="#FFF"/>
-
-        <EditText
-            android:id="@+id/MaxPriceText"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintWidth_percent="0.4"
-            android:text="MAX"
-            android:gravity="center"
-            app:layout_constraintStart_toEndOf="@id/MinPriceText"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:padding="8dp"
-            android:background="#FFF"/>
-
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#fff"
-        app:layout_constraintBottom_toBottomOf="parent">
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/ResetButton"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintWidth_percent="0.4"
-            android:text="Reset"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/ApplyButton"
-            app:cornerRadius="0dp"
-            android:backgroundTint="#ffffff"
-            app:strokeWidth="1dp"
-            android:textColor="#BE2827"
-            app:strokeColor="#BE2827"/>
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/ApplyButton"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintWidth_percent="0.4"
-            android:text="Apply"
-            app:layout_constraintStart_toEndOf="@id/ResetButton"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:backgroundTint="#BE2827"
-            app:cornerRadius="0dp"/>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
+        android:background="#60000000"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

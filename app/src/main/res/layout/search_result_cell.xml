@@ -8,6 +8,15 @@
     android:layout_margin="4dp"
     android:id="@+id/panel">
 
+    <TextView
+        android:id="@+id/discountValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ic_discount_label"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:textStyle="bold"
+        android:text="TEST"/>
     <ImageView
         android:id="@+id/img"
         android:layout_width="match_parent"

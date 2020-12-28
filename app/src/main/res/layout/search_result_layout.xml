@@ -122,23 +122,15 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/filterSortBar" />
 
-    <FrameLayout
+     <FrameLayout
         android:id="@+id/filterFragmentLayout"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/search_bar"
-        app:layout_constraintWidth_percent="0.90"
-        android:elevation="1dp"/>
-    <View
-        android:id="@+id/filterFragmentLayoutBlur"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/search_bar"
-        android:background="#80000000"
-        android:visibility="invisible"/>
+        android:background="#00000000"/>
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

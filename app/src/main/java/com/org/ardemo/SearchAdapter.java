@@ -8,6 +8,8 @@ import android.graphics.BitmapFactory;
 import android.graphics.Paint;
 import android.media.Rating;
 import android.net.Uri;
+import android.os.Parcelable;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +19,7 @@ import android.widget.TextView;
 import com.google.android.material.button.MaterialButton;
 import com.idlestar.ratingstar.RatingStarView;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.io.InputStream;
@@ -24,6 +27,8 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.NavigableMap;
 import java.util.TreeMap;
+
+import static com.org.ardemo.DemoUtils.format;
 
 public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder> {
 
@@ -52,16 +57,26 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
             InputStream is = assetManager.open(path);
             Bitmap bitmap = BitmapFactory.decodeStream(is);
             viewHolder.img.setImageBitmap(bitmap);
+            is.close();
         }catch(Exception e){
             e.printStackTrace();
         }
 
-        if(product.oldPrice == 0){
+        if(product.getOldPrice() == 0){
             viewHolder.oldPrice.setVisibility(View.GONE);
+            viewHolder.discountValue.setVisibility(View.GONE);
         }
         else{
             viewHolder.oldPrice.setPaintFlags(viewHolder.oldPrice.getPaintFlags()| Paint.STRIKE_THRU_TEXT_FLAG); //strike through
             viewHolder.oldPrice.setText("$"+String.format("%.2f",product.getOldPrice()));
+
+            double discount =  product.getDiscountAmount() * 100; // in %
+            String text = "<font color=#DC593B>"+(int)discount+"%<br/></font> <font color=#ffffff>OFF</font>";
+            viewHolder.discountValue.setText(Html.fromHtml(text));
+            viewHolder.discountValue.setElevation(2);
+            //viewHolder.discountValue.setBackgroundColor(0xFFFAD923);
+            viewHolder.discountValue.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+            viewHolder.discountValue.setBackgroundResource(R.drawable.ic_discount_label);
         }
         viewHolder.newPrice.setText("$"+String.format("%.2f",product.getNewPrice()));
         viewHolder.itemsSold.setText(format(product.getItemsSold()) + " sold");
@@ -71,15 +86,16 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
 
         viewHolder.shopRating.setRating(product.getShopRating());
 
-//        viewHolder.img.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent myIntent = new Intent(v.getContext(), ViewImageActivity.class);
-//                int pos = viewHolder.getLayoutPosition();
-//                myIntent.putExtra("imgID", uriList.get(pos).toString());
-//                v.getContext().startActivity(myIntent);
-//            }
-//        });
+        viewHolder.panel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent myIntent = new Intent(v.getContext(), ViewProductActivity.class);
+                int pos = viewHolder.getLayoutPosition();
+                myIntent.putExtra("product", (Parcelable) productList.get(pos));
+                v.getContext().startActivity(myIntent);
+            }
+        });
     }
 
     @Override
@@ -89,14 +105,16 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
 
 
     public class ViewHolder extends RecyclerView.ViewHolder{
-        private TextView title, oldPrice, newPrice, itemsSold;
+        private TextView title, oldPrice, newPrice, itemsSold, discountValue;
         private MaterialButton supportLocal, addOnDeal;
         private ImageView img,ar;
         private RatingStarView shopRating;
+        ConstraintLayout panel;
         public ViewHolder(View view) {
             super(view);
             title = view.findViewById(R.id.title);
             img = view.findViewById(R.id.img);
+            discountValue = view.findViewById(R.id.discountValue);
             oldPrice = view.findViewById(R.id.oldPrice);
             newPrice = view.findViewById(R.id.newPrice);
             supportLocal = view.findViewById(R.id.supportLocalTag);
@@ -104,31 +122,9 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
             shopRating = view.findViewById(R.id.shopRating);
             itemsSold = view.findViewById(R.id.itemsSold);
             ar = view.findViewById(R.id.arIcon);
+            panel = view.findViewById(R.id.panel);
         }
     }
 
-    private static final NavigableMap<Long, String> suffixes = new TreeMap<>();
-    static {
-        suffixes.put(1_000L, "k");
-        suffixes.put(1_000_000L, "M");
-        suffixes.put(1_000_000_000L, "G");
-        suffixes.put(1_000_000_000_000L, "T");
-        suffixes.put(1_000_000_000_000_000L, "P");
-        suffixes.put(1_000_000_000_000_000_000L, "E");
-    }
 
-    public static String format(long value) {
-        //Long.MIN_VALUE == -Long.MIN_VALUE so we need an adjustment here
-        if (value == Long.MIN_VALUE) return format(Long.MIN_VALUE + 1);
-        if (value < 0) return "-" + format(-value);
-        if (value < 1000) return Long.toString(value); //deal with easy case
-
-        Map.Entry<Long, String> e = suffixes.floorEntry(value);
-        Long divideBy = e.getKey();
-        String suffix = e.getValue();
-
-        long truncated = value / (divideBy / 10); //the number part of the output times 10
-        boolean hasDecimal = truncated < 100 && (truncated / 10d) != (truncated / 10);
-        return hasDecimal ? (truncated / 10d) + suffix : (truncated / 10) + suffix;
-    }
 }
