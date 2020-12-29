@@ -1,34 +1,28 @@
 package com.org.ardemo;
 
 import android.content.res.AssetManager;
-import android.graphics.Rect;
-import android.graphics.drawable.BitmapDrawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.Spinner;
-import androidx.appcompat.widget.Toolbar;
 
-import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.navigation.NavigationView;
+import com.org.ardemo.objs.Product;
+import com.org.ardemo.objs.Review;
+import com.org.ardemo.objs.Shop;
 
 import java.io.IOException;
-import java.net.URI;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 public class SearchActivity extends AppCompatActivity{
 
@@ -36,19 +30,11 @@ public class SearchActivity extends AppCompatActivity{
     FragmentManager fragmentManager;
     int width;
     private String[] filelist;
-    ArrayList<shop> ShopList = new ArrayList<>();
+    ArrayList<Shop> ShopList = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.search_result_layout);
-
-        shop shopA = new shop("company_logo_1.png", "Houze", 17, 420,73,4.8);
-        shop shopB = new shop("company_logo_2.png", "Repoe", 23, 982,99,4.7);
-        shop shopC = new shop("company_logo_3.png", "Origami", 10, 77,89,4.5);
-
-        ShopList.add(shopA);
-        ShopList.add(shopB);
-        ShopList.add(shopC);
         AssetManager aMan = this.getAssets();
         try {
             filelist = aMan.list("product-images");
@@ -56,6 +42,24 @@ public class SearchActivity extends AppCompatActivity{
             e.printStackTrace();
         }
 
+        /* Fake data to populate the various activities*/
+        Shop shopA = new Shop("company_logo_1.png", "Houze", "4 Changi South Lane", 17, 420,73,4.8);
+        Shop shopB = new Shop("company_logo_2.png", "Repoe", "54 Bayfront Avenue Block 12", 23, 982,99,4.7);
+        Shop shopC = new Shop("company_logo_3.jpg", "Origami", "Prince Edward Avenue ",10, 77,89,4.5);
+
+        Review reviewA = new Review("loremipsum.txt","Jane Doe", "reviewerA.png", "None", new String[]{"reviewA_1.png","reviewA_2.png"},4.5,new GregorianCalendar(2020, 12, 11).getTime());
+        Review reviewB = new Review("loremipsum.txt","Alice Tan", "reviewerB.png", "Red", new String[]{"reviewB_1.png"},4.8,new GregorianCalendar(2020, 11, 12).getTime());
+        Review reviewC = new Review("loremipsum.txt","Bob Lim", "reviewerC.png", "Shiny", new String[]{"reviewC_1.png","reviewC_2.png","reviewC_2.png"},4.6,new GregorianCalendar(2020, 12, 28).getTime());
+        Review reviewD = new Review("loremipsum.txt","John Doe", "reviewerD.png", "Cool", new String[]{"reviewD_1.png"},2.5,new GregorianCalendar(2020, 12, 2).getTime());
+
+        Product productA = new Product("HOUZE - Diato", filelist[0], "HOUSE",86.80, 5.90, true, false, 3.0f,360, 65,false, new Review[]{reviewA}, shopA);
+        Product productB = new Product("Citylife Chait", filelist[1], "Citylife",211.60, 65.70, true, false, 4.0f,2930, 406,true, new Review[]{reviewB, reviewC}, shopB);
+        Product productC = new Product("Best Shop Plane", filelist[2], "Best Shop",2.00, 0.99, false, true, 5.0f,1999, 23,true, new Review[]{reviewD}, shopC);
+
+        ArrayList<Product> productList = new ArrayList<>();
+        productList.add(productA);
+        productList.add(productB);
+        productList.add(productC);
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
@@ -85,18 +89,9 @@ public class SearchActivity extends AppCompatActivity{
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getApplicationContext(),2);
         recyclerView.setLayoutManager(layoutManager);
 
-        ArrayList<Product> productList = prepareData();
         SearchAdapter searchResultAdapter = new SearchAdapter(getApplicationContext(), productList);
         recyclerView.setAdapter(searchResultAdapter);
     }
 
-    private ArrayList<Product> prepareData(){
-        ArrayList<Product> productLists = new ArrayList<>();
-        for(int i = 0; i< filelist.length; i++){
-            Product product = new Product("HOUZE - Diato", filelist[i], 11.80, 5.90, true, false, 4.0f,1800, true);
-            product.setShop(ShopList.get(i));
-            productLists.add(product);
-        }
-        return productLists;
-    }
+
 }

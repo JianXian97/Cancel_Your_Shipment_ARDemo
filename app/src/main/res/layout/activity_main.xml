@@ -35,7 +35,8 @@
                 android:layout_alignParentEnd="true"
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="20dp"
-                android:background="@drawable/round_button_red"
+                android:background="@drawable/round_button"
+                android:backgroundTint="@color/shopeeRed"
                 android:src="@drawable/ic_cancel_black_24dp" />
 
             <RelativeLayout
@@ -71,7 +72,8 @@
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentBottom="true"
                     android:layout_marginEnd="30dp"
-                    android:background="@drawable/round_button_red"
+                    android:background="@drawable/round_button"
+                    android:backgroundTint="@color/shopeeRed"
                     android:src="@drawable/ic_baseline_add_shopping_cart_24" />
 
             </RelativeLayout>
@@ -148,7 +150,6 @@
                     android:layout_marginBottom="8dp"
                     android:background="@drawable/rectangle"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/paper_airplane"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.313"
@@ -166,7 +167,6 @@
                     android:layout_marginBottom="8dp"
                     android:background="@drawable/rectangle"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/chair"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.313"
@@ -184,7 +184,6 @@
                     android:layout_marginBottom="8dp"
                     android:background="@drawable/rectangle"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/earth"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.313"
@@ -311,7 +310,6 @@
                         android:layout_width="60dp"
                         android:layout_height="60dp"
                         android:layout_marginStart="8dp"
-                        android:src="@drawable/earth"
                         android:gravity="center_vertical"
                         android:layout_centerInParent="true"
                         android:background="@drawable/round_button"

@@ -6,27 +6,22 @@ import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Paint;
-import android.media.Rating;
-import android.net.Uri;
 import android.os.Parcelable;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RatingBar;
 import android.widget.TextView;
 import com.google.android.material.button.MaterialButton;
 import com.idlestar.ratingstar.RatingStarView;
+import com.org.ardemo.objs.Product;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Map;
-import java.util.NavigableMap;
-import java.util.TreeMap;
 
 import static com.org.ardemo.DemoUtils.format;
 
@@ -89,7 +84,6 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         viewHolder.panel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Intent myIntent = new Intent(v.getContext(), ViewProductActivity.class);
                 int pos = viewHolder.getLayoutPosition();
                 myIntent.putExtra("product", (Parcelable) productList.get(pos));
@@ -109,7 +103,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         private MaterialButton supportLocal, addOnDeal;
         private ImageView img,ar;
         private RatingStarView shopRating;
-        ConstraintLayout panel;
+        ConstraintLayout panel, labelsPanel;
         public ViewHolder(View view) {
             super(view);
             title = view.findViewById(R.id.title);
@@ -123,6 +117,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
             itemsSold = view.findViewById(R.id.itemsSold);
             ar = view.findViewById(R.id.arIcon);
             panel = view.findViewById(R.id.panel);
+            labelsPanel = view.findViewById(R.id.labelsPanel);
         }
     }
 

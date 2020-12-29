@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/overall">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@id/panel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:background="#fff">
+        <com.nex3z.togglebuttongroup.SingleSelectToggleGroup
+            android:id="@+id/group_choices"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:tbgCheckedButton="@+id/allReviews"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+           app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintWidth_percent="0.95">
+
+            <com.org.ardemo.CustomToggle
+                android:id="@+id/allReviews"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="All\n(608)"
+                android:textSize="9.5sp"
+                android:layout_margin="2dp"/>
+
+            <com.org.ardemo.CustomToggle
+                android:id="@+id/withComment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="With Comment\n(608)"
+                android:textSize="9.5sp"
+                android:layout_margin="2dp"/>
+            <com.org.ardemo.CustomToggle
+                android:id="@+id/withMedia"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="With Media\n(608)"
+                android:textSize="9.5sp"
+                android:layout_margin="2dp"/>
+
+            <com.org.ardemo.CustomToggle
+                android:id="@+id/fiveStars"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="★★★★★"
+                android:textSize="9.5sp"
+                android:layout_margin="2dp"/>
+            <com.org.ardemo.CustomToggle
+                android:id="@+id/fourStars"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="★★★★"
+                android:textSize="9.5sp"
+                android:layout_margin="2dp"/>
+
+            <com.org.ardemo.CustomToggle
+                android:id="@+id/threeStars"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="★★★"
+                android:textSize="9.5sp"
+                android:layout_margin="2dp"/>
+            <com.org.ardemo.CustomToggle
+                android:id="@+id/twoStars"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="★★"
+                android:textSize="9.5sp"
+                android:layout_margin="2dp"/>
+
+            <com.org.ardemo.CustomToggle
+                android:id="@+id/oneStar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="★"
+                android:textSize="9.5sp"
+                android:layout_margin="2dp"/>
+
+
+        </com.nex3z.togglebuttongroup.SingleSelectToggleGroup>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/reviews"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_below="@+id/panel"
+        app:layout_constraintTop_toBottomOf="@id/panel"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:background="#fff"
+        />
+</androidx.constraintlayout.widget.ConstraintLayout>

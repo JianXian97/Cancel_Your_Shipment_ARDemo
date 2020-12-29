@@ -19,7 +19,6 @@ import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.PixelCopy;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -47,7 +46,7 @@ import com.google.ar.sceneform.math.Vector3;
 import com.google.ar.sceneform.rendering.ModelRenderable;
 import com.google.ar.sceneform.ux.ArFragment;
 import com.google.ar.sceneform.ux.TransformableNode;
-import com.org.ardemo.R;
+import com.org.ardemo.objs.Shop;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -79,12 +78,12 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<ModelRenderable> listOfRenderable;
     ArrayList<Uri> imgUriList;
 
-    int[] productURI = {R.drawable.paper_airplane,R.drawable.earth,R.drawable.chair};
+    String[] productURI = {"paper_airplane.png","earth.png","chair.png"};
     String[] productPrice = {"100.50","70.90","900.00"};
     String[] productStock = {"420","18","7"};
-    shop shopA = new shop("company_logo_1", "Houze", 17, 420,73,4.8);
-    shop shopB = new shop("company_logo_2", "Repoe", 23, 982,99,4.7);
-    shop shopC = new shop("company_logo_3", "Origami", 10, 77,89,4.5);
+    Shop shopA = new Shop("company_logo_1.png", "Houze", "4 Changi South Lane", 17, 420,73,4.8);
+    Shop shopB = new Shop("company_logo_2.png", "Repoe", "54 Bayfront Avenue Block 12", 23, 982,99,4.7);
+    Shop shopC = new Shop("company_logo_3.jpg", "Origami", "Prince Edward Avenue ",10, 77,89,4.5);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -177,6 +176,10 @@ public class MainActivity extends AppCompatActivity {
                 removeAnchorNode(selectedAnchorNode);
             }
         });
+
+        fillImageButtons(paperAirplaneIcon,productURI[0]);
+        fillImageButtons(earthIcon,productURI[1]);
+        fillImageButtons(chairIcon,productURI[2]);
         paperAirplaneIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -333,9 +336,32 @@ public class MainActivity extends AppCompatActivity {
         variationPanel.setVisibility(View.VISIBLE);
         addToCartMenuLayoutSlider.setVisibility(View.VISIBLE);
         //Toast.makeText(MainActivity.this, Object + " Object Activated", Toast.LENGTH_SHORT).show();
-        selectedProduct.setImageResource(productURI[position]);
+
+        AssetManager assetManager = getAssets();
+        try{
+            String path = "ar-images/"+productURI[position];
+            InputStream is = assetManager.open(path);
+            Bitmap bitmap = BitmapFactory.decodeStream(is);
+            selectedProduct.setImageBitmap(bitmap);
+            is.close();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
         price.setText("$"+productPrice[position]);
         stock.setText("Stocks:" + productStock[position]);
+    }
+
+    private void fillImageButtons(ImageButton imgBtn, String imgName){
+        AssetManager assetManager = getAssets();
+        try{
+            String path = "ar-images/"+imgName;
+            InputStream is = assetManager.open(path);
+            Bitmap bitmap = BitmapFactory.decodeStream(is);
+            imgBtn.setImageBitmap(bitmap);
+            is.close();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -460,10 +486,10 @@ public class MainActivity extends AppCompatActivity {
         }
         return list;
     }
-    private void displayShopInformation(shop shop, ImageView shopPicture, TextView shopName, TextView shopLastSeen, TextView shopProductCount, TextView shopRating, TextView shopChatResponse){
+    private void displayShopInformation(Shop shop, ImageView shopPicture, TextView shopName, TextView shopLastSeen, TextView shopProductCount, TextView shopRating, TextView shopChatResponse){
         AssetManager assetManager = getAssets();
         try{
-            String path = "shop-images/"+shop.picture;
+            String path = "shop-images/"+shop.getPicture();
             InputStream is = assetManager.open(path);
             Bitmap bitmap = BitmapFactory.decodeStream(is);
             shopPicture.setImageBitmap(bitmap);
@@ -471,10 +497,10 @@ public class MainActivity extends AppCompatActivity {
         }catch(Exception e){
             e.printStackTrace();
         }
-        shopName.setText(shop.name);
-        shopLastSeen.setText("Active " + Integer.toString(shop.lastSeen) + " minutes ago");
-        shopProductCount.setText(Integer.toString(shop.productCount));
-        shopChatResponse.setText(Integer.toString(shop.chatResponse)+"%");
-        shopRating.setText(Double.toString(shop.rating));
+        shopName.setText(shop.getName());
+        shopLastSeen.setText("Active " + Integer.toString(shop.getLastSeen()) + " minutes ago");
+        shopProductCount.setText(Integer.toString(shop.getProductCount()));
+        shopChatResponse.setText(Integer.toString(shop.getChatResponse())+"%");
+        shopRating.setText(Double.toString(shop.getRating()));
     }
 }

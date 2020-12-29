@@ -1,15 +1,12 @@
 package com.org.ardemo;
 
-import android.content.Intent;
 import android.content.res.AssetManager;
-import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.GradientDrawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
@@ -24,14 +21,17 @@ import android.widget.ToggleButton;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
 import com.idlestar.ratingstar.RatingStarView;
-import com.org.ardemo.fragments.ProductDetailsFragment;
+import com.org.ardemo.objs.Product;
 
-import java.io.File;
 import java.io.InputStream;
-import java.util.ArrayList;
 
 import static com.org.ardemo.DemoUtils.format;
 
@@ -45,6 +45,8 @@ public class ViewProductActivity extends AppCompatActivity {
     View fixedTopPanelBackground;
     RatingStarView shopRating;
     ImageButton backTopButton, shareTopButton, moreTopButton;
+    ViewPager2 viewPager;
+    String[] nameList = new String[]{"Details","Reviews","Discounts"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,10 +69,7 @@ public class ViewProductActivity extends AppCompatActivity {
         img = findViewById(R.id.image);
         arIcon = findViewById(R.id.arIcon);
         itemsSold = findViewById(R.id.itemsSold);
-        //shopRating = (RatingStarView) findViewById(R.id.shopRating);
-        toggleDetails = findViewById(R.id.toggleDetails);
-        toggleReviews = findViewById(R.id.toggleReviews);
-        toggleDiscounts = findViewById(R.id.toggleDiscounts);
+        shopRating = (RatingStarView) findViewById(R.id.shopRatingLarge);
         fixedTopPanel = findViewById(R.id.fixedTopPanel);
         fixedTopPanelBackground = findViewById(R.id.fixedTopPanelBackground);
         fixedShopName = findViewById(R.id.fixedShopName);
@@ -78,9 +77,6 @@ public class ViewProductActivity extends AppCompatActivity {
         backTopButton = findViewById(R.id.backTopButton);
         shareTopButton = findViewById(R.id.shareTopButton);
         moreTopButton = findViewById(R.id.moreTopButton);
-
-        displayDetails(product);
-        toggleDetails.setChecked(true);
 
         img.setScaleType(ImageView.ScaleType.CENTER_CROP);
         AssetManager assetManager = getAssets();
@@ -111,34 +107,10 @@ public class ViewProductActivity extends AppCompatActivity {
         }
         newPrice.setText("$"+String.format("%.2f",product.getNewPrice()));
         itemsSold.setText(format(product.getItemsSold()) + " sold");
-        if(!product.hasAR()) ar.setVisibility(View.GONE);
-        //shopRating.setRating(product.getShopRating());
+        if(!product.hasAR()) arIcon.setVisibility(View.GONE);
+        shopRating.setRating(product.getShopRating());
 
-        toggleDetails.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(toggleDetails.isChecked()) displayDetails(product);
-            }
-        });
-        toggleReviews.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(toggleReviews.isChecked()){
-                    toggleDetails.setChecked(false);
-                    toggleDiscounts.setChecked(false);
-                }
-            }
-        });
-        toggleDiscounts.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(toggleDiscounts.isChecked()) {
-                    toggleDetails.setChecked(false);
-                    toggleReviews.setChecked(false);
-                    Log.d("TEST","TEST");
-                }
-            }
-        });
+
 
         scrollView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
             @Override
@@ -159,6 +131,36 @@ public class ViewProductActivity extends AppCompatActivity {
                 backTopButton.setBackground(drawCircle(newColor));
                 shareTopButton.setBackground(drawCircle(newColor));
                 moreTopButton.setBackground(drawCircle(newColor));
+            }
+        });
+        viewPager = findViewById(R.id.productInfo);
+
+        viewPager.setAdapter(createCardAdapter(product));
+        TabLayout tabLayout = findViewById(R.id.tab_layout);
+        new TabLayoutMediator(tabLayout, viewPager,
+                (tab, position) -> tab.setText(nameList[position])
+        ).attach();
+
+
+        viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageSelected (int position){
+                super.onPageSelected(position);
+                //getAdapter().notifyDataSetChanged();
+                //ViewPagerAdapter adapter = (ViewPagerAdapter) viewPager.getAdapter();
+                scrollView.setLayoutParams(new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.WRAP_CONTENT));
+//                getSupportFragmentManager().executePendingTransactions();
+//                getFragmentManager().executePendingTransactions();
+//                Fragment currentFragment = getSupportFragmentManager().findFragmentByTag("f"+position);
+//
+//                if(currentFragment!=null){
+//                    View view = currentFragment.getView();
+//                    Log.e("TEST","234");
+//                    //View view = adapter.list.get(position).getView();
+//                    if(view!=null && viewPager.getLayoutParams().height != view.getMeasuredHeight()){
+//                        viewPager.setLayoutParams(new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.WRAP_CONTENT));
+//                    }
+//                }
 
 
             }
@@ -173,16 +175,7 @@ public class ViewProductActivity extends AppCompatActivity {
     }
 
 
-    public void displayDetails(Product product){
-        toggleReviews.setChecked(false);
-        toggleDiscounts.setChecked(false);
-        Bundle bundle = new Bundle();
-        bundle.putParcelable("data",product);
-        Fragment fragment = new ProductDetailsFragment();
-        fragment.setArguments(bundle);
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.productInfo, fragment, fragment.getClass().getSimpleName()).addToBackStack(null).commit();
-    }
+
 
     public static GradientDrawable drawCircle(int backgroundColor) {
         GradientDrawable shape = new GradientDrawable();
@@ -191,4 +184,10 @@ public class ViewProductActivity extends AppCompatActivity {
         shape.setColor(backgroundColor);
         return shape;
     }
+
+    private ViewPagerAdapter createCardAdapter(Product product) {
+        ViewPagerAdapter adapter = new ViewPagerAdapter(this,product);
+        return adapter;
+    }
+
 }

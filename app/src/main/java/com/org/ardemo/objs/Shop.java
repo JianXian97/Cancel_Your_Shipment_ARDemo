@@ -1,19 +1,17 @@
-package com.org.ardemo;
+package com.org.ardemo.objs;
 
-import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.widget.ImageView;
-import android.widget.TextView;
 
-public class shop implements Parcelable{
-    String name, picture;
+public class Shop implements Parcelable{
+    String name, picture, address;
     int lastSeen, productCount, chatResponse;
     double rating;
 
-    public shop(String picture, String name, int lastSeen, int productCount, int chatResponse, double rating){
+    public Shop(String picture, String name, String address, int lastSeen, int productCount, int chatResponse, double rating){
         this.picture = picture;
         this.name = name;
+        this.address = address;
         this.lastSeen = lastSeen;
         this.productCount = productCount;
         this.chatResponse = chatResponse;
@@ -28,6 +26,7 @@ public class shop implements Parcelable{
     }
 
     public String getName() {return name;}
+    public String getaddress() {return address;}
     public int getLastSeen() {return lastSeen;}
     public int getProductCount() {return productCount;}
     public int getChatResponse() {return chatResponse;}
@@ -41,6 +40,7 @@ public class shop implements Parcelable{
     @Override
     public void writeToParcel(Parcel out, int flags) {
         out.writeString(picture);
+        out.writeString(address);
         out.writeString(name);
         out.writeInt(lastSeen);
         out.writeInt(productCount);
@@ -49,19 +49,20 @@ public class shop implements Parcelable{
     }
 
     // this is used to regenerate your object. All Parcelables must have a CREATOR that implements these two methods
-    public static final Parcelable.Creator<shop> CREATOR = new Parcelable.Creator<shop>() {
-        public shop createFromParcel(Parcel in) {
-            return new shop(in);
+    public static final Parcelable.Creator<Shop> CREATOR = new Parcelable.Creator<Shop>() {
+        public Shop createFromParcel(Parcel in) {
+            return new Shop(in);
         }
 
-        public shop[] newArray(int size) {
-            return new shop[size];
+        public Shop[] newArray(int size) {
+            return new Shop[size];
         }
     };
 
     // constructor that takes a Parcel and gives you an object populated with it's values
-    private shop(Parcel in) {
+    private Shop(Parcel in) {
         picture= in.readString();
+        address= in.readString();
         name= in.readString();
         lastSeen= in.readInt();
         productCount= in.readInt();

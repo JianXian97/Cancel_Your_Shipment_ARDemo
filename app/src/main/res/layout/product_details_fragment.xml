@@ -2,7 +2,8 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/overall">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@id/panel"
@@ -106,7 +107,6 @@
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:layout_marginStart="8dp"
-                android:src="@drawable/earth"
                 android:gravity="center_vertical"
                 android:layout_centerInParent="true"
                 android:background="@drawable/round_button"
@@ -153,7 +153,8 @@
                 app:rippleColor="#33AAAAAA"
                 app:backgroundTint="@android:color/transparent"
                 app:strokeColor="#D0131F"
-                app:strokeWidth="1dp" />
+                app:strokeWidth="1dp"
+                app:cornerRadius="0dp"/>
         </RelativeLayout>
         <LinearLayout
             android:id="@+id/shopStatsNumbers"
@@ -161,7 +162,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/shopDetailsBuffer"
             android:background="@drawable/rectangle_no_border"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:paddingTop="8dp">
             <TextView
                 android:id="@+id/shopProductCount"
                 android:layout_width="fill_parent"
@@ -229,4 +231,12 @@
                 />
         </LinearLayout>
     </RelativeLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:text="\*Applicable to items(s) in this shop only (excl. shipping fees)"
+        android:textSize="9sp"
+        app:layout_constraintTop_toBottomOf="@id/shopDetails"
+        android:background="#fff"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

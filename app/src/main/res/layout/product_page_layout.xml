@@ -19,7 +19,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="@id/backTopButton"
             android:alpha="0"
-            android:background="#fff"/>
+            android:background="@drawable/background_with_front_shadow"/>
         <ImageButton
             android:id="@+id/backTopButton"
             android:layout_width="30dp"
@@ -30,7 +30,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_bias="0.05"
             android:src="@drawable/ic_baseline_arrow_back_24"
-            android:background="@drawable/round_button_transparent"
+            android:background="@drawable/round_button"
             android:tint="#fff"
             android:paddingTop="100dp"
             android:paddingBottom="100dp"/>
@@ -58,7 +58,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_bias="0.85"
             android:src="@drawable/ic_baseline_shopping_cart_24"
-            android:background="@drawable/round_button_transparent"
+            android:background="@drawable/round_button"
             android:tint="#fff"/>
 
         <ImageButton
@@ -71,7 +71,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_bias="0.99"
             android:src="@drawable/ic_baseline_more_horiz_24"
-            android:background="@drawable/round_button_transparent"
+            android:background="@drawable/round_button"
             android:tint="#fff"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
     <ScrollView
@@ -140,7 +140,7 @@
                 android:layout_marginStart="8dp"/>
 
             <com.idlestar.ratingstar.RatingStarView
-                android:id="@id/shopRating"
+                android:id="@+id/shopRatingLarge"
                 android:layout_width="wrap_content"
                 android:layout_height="8dp"
                 android:layout_marginStart="8dp"
@@ -167,9 +167,9 @@
                 android:textColor="#000"
                 android:textSize="11sp"
                 android:layout_marginStart="10dp"
-                app:layout_constraintStart_toEndOf="@id/shopRating"
-                app:layout_constraintTop_toTopOf="@id/shopRating"
-                app:layout_constraintBottom_toBottomOf="@id/shopRating"/>
+                app:layout_constraintStart_toEndOf="@id/shopRatingLarge"
+                app:layout_constraintTop_toTopOf="@id/shopRatingLarge"
+                app:layout_constraintBottom_toBottomOf="@id/shopRatingLarge"/>
 
             <ImageView
                 android:id="@+id/arIcon"
@@ -201,15 +201,15 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/shopRating"
+                app:layout_constraintTop_toBottomOf="@id/shopRatingLarge"
                 app:layout_constraintWidth_percent="0.333"
                 android:layout_marginTop="10dp"
                 android:backgroundTint="#00000000"
-                android:text="15 Days Return*"
+                android:text="15 Days Return\*"
                 android:textColor="#898989"
                 android:textSize="9sp"
                 android:minHeight="0dp"
-                android:padding="-2dp"
+                android:padding="-5dp"
                 android:drawableLeft="@drawable/ic_resource_return"
                 app:iconTint="@color/shopeeRed"
                 android:inputType="text"/>
@@ -220,7 +220,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 app:layout_constraintStart_toEndOf="@id/returnPolicy"
-                app:layout_constraintTop_toBottomOf="@id/shopRating"
+                app:layout_constraintTop_toBottomOf="@id/shopRatingLarge"
                 app:layout_constraintWidth_percent="0.333"
                 android:layout_marginTop="10dp"
                 android:backgroundTint="#00000000"
@@ -228,7 +228,7 @@
                 android:textColor="#898989"
                 android:textSize="9sp"
                 android:minHeight="0dp"
-                android:padding="-2dp"
+                android:padding="-5dp"
                 android:drawableLeft="@drawable/ic_verified"
                 app:iconTint="@color/shopeeRed"
                 android:inputType="text"/>
@@ -239,7 +239,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 app:layout_constraintStart_toEndOf="@id/authentic"
-                app:layout_constraintTop_toBottomOf="@id/shopRating"
+                app:layout_constraintTop_toBottomOf="@id/shopRatingLarge"
                 app:layout_constraintWidth_percent="0.333"
                 android:layout_marginTop="10dp"
                 android:backgroundTint="#00000000"
@@ -247,62 +247,33 @@
                 android:textColor="#898989"
                 android:textSize="9sp"
                 android:minHeight="0dp"
-                android:padding="-2dp"
+                android:padding="-5dp"
                 android:drawableLeft="@drawable/ic_baseline_local_shipping_24"
                 app:iconTint="@color/shopeeRed"
                 android:inputType="text"/>
 
-            <ToggleButton
-                android:id="@+id/toggleDetails"
-                android:textColor="@color/toggle_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/returnPolicy"
-                app:layout_constraintEnd_toStartOf="@id/toggleReviews"
-                android:textOff="Details"
-                android:textOn="Details"
-                android:inputType="text"
-                android:background="#00000000"
-                />
-            <ToggleButton
-                android:id="@+id/toggleReviews"
-                android:textColor="@color/toggle_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/returnPolicy"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:textOff="Reviews"
-                android:textOn="Reviews"
-                android:inputType="text"
-                android:background="#00000000"
-                />
-            <ToggleButton
-                android:id="@+id/toggleDiscounts"
-                android:textColor="@color/toggle_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/returnPolicy"
-                app:layout_constraintStart_toEndOf="@id/toggleReviews"
-                android:textOff="Discounts"
-                android:textOn="Discounts"
-                android:inputType="text"
-                android:background="#00000000"/>
-
         </androidx.constraintlayout.widget.ConstraintLayout>
-        <FrameLayout
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tab_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/topPanel"
+            android:background="#fff"/>
+        <androidx.viewpager2.widget.ViewPager2
             android:layout_marginTop="5dp"
             android:id="@+id/productInfo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/topPanel"/>
+            android:layout_below="@id/tab_layout"/>
         </RelativeLayout>
+
+
     </ScrollView>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/bottomPanel"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintHeight_percent="0.1"
+        app:layout_constraintHeight_percent="0.08"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:background="@drawable/background_with_shadow">
@@ -369,16 +340,15 @@
             android:layout_height="match_parent"
             app:layout_constraintStart_toEndOf="@id/addToCart"
             app:layout_constraintWidth_percent="0.25"
-            android:backgroundTint="@color/shopeeRed"
             android:text="Buy Now"
             android:textSize="13sp"
             android:minHeight="0dp"
             android:layout_margin="0dp"
             android:padding="0dp"
-            app:iconTint="@color/shopeeRed"
             android:textColor="#fff"
             android:inputType="text"
-            app:cornerRadius="0dp"/>
+            app:cornerRadius="0dp"
+            android:backgroundTint="@color/shopeeRed"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
