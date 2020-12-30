@@ -12,6 +12,8 @@ import com.org.ardemo.objs.Product;
 import com.org.ardemo.R;
 import com.org.ardemo.objs.Shop;
 
+import static com.org.ardemo.SearchActivity.deviceWidth;
+
 
 public class ProductDiscountsFragment extends Fragment {
     private Integer pos;
@@ -30,7 +32,10 @@ public class ProductDiscountsFragment extends Fragment {
     }
 
     public int getHeight(){
-        return overall.getHeight();
+        overall.measure(
+                View.MeasureSpec.makeMeasureSpec(deviceWidth, View.MeasureSpec.EXACTLY),
+                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+        return overall.getMeasuredHeight();
     }
 
     @Override

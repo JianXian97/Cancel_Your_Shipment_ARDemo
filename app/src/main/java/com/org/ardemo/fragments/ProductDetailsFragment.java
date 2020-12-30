@@ -24,6 +24,8 @@ import com.org.ardemo.objs.Shop;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
+import static com.org.ardemo.SearchActivity.deviceWidth;
+
 public class ProductDetailsFragment extends Fragment {
     private int pos;
     Product product;
@@ -76,7 +78,10 @@ public class ProductDetailsFragment extends Fragment {
     }
 
     public int getHeight(){
-        return overall.getHeight();
+        overall.measure(
+                View.MeasureSpec.makeMeasureSpec(deviceWidth, View.MeasureSpec.EXACTLY),
+                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+        return overall.getMeasuredHeight();
     }
 
     @Override

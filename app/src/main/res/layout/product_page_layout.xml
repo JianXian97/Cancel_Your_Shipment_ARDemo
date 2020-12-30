@@ -346,7 +346,7 @@
             android:textColor="#fff"
             android:inputType="text"
             app:cornerRadius="0dp"
-            android:backgroundTint="@color/shopeeRed"/>
+            android:background="@color/shopeeRed"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

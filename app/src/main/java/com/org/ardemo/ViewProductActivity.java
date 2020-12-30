@@ -11,6 +11,7 @@ import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.text.Html;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -38,6 +39,7 @@ import com.org.ardemo.objs.Product;
 import java.io.InputStream;
 
 import static com.org.ardemo.DemoUtils.format;
+import static com.org.ardemo.SearchActivity.deviceWidth;
 
 public class ViewProductActivity extends AppCompatActivity {
     MaterialButton chatNow, ar, addToCart, buyNow, returnPolicy, freeShipping, authentic;
@@ -45,7 +47,7 @@ public class ViewProductActivity extends AppCompatActivity {
     TextView title, discountValue, oldPrice, newPrice, itemsSold, fixedShopName;
     ToggleButton toggleDetails, toggleReviews, toggleDiscounts;
     ScrollView scrollView;
-    ConstraintLayout fixedTopPanel;
+    ConstraintLayout fixedTopPanel, bottomPanel;
     View fixedTopPanelBackground;
     RatingStarView shopRating;
     ImageButton backTopButton, shareTopButton, moreTopButton;
@@ -81,6 +83,7 @@ public class ViewProductActivity extends AppCompatActivity {
         backTopButton = findViewById(R.id.backTopButton);
         shareTopButton = findViewById(R.id.shareTopButton);
         moreTopButton = findViewById(R.id.moreTopButton);
+        bottomPanel = findViewById(R.id.bottomPanel);
 
         img.setScaleType(ImageView.ScaleType.CENTER_CROP);
         AssetManager assetManager = getAssets();
@@ -130,6 +133,15 @@ public class ViewProductActivity extends AppCompatActivity {
             }
         });
 
+        arIcon.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                Intent myIntent = new Intent(v.getContext(), ARActivity.class);
+                myIntent.putExtra("product", (Parcelable) product);
+                startActivity(myIntent);
+            }
+        });
+
         scrollView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
             @Override
             public void onScrollChanged() {
@@ -160,14 +172,18 @@ public class ViewProductActivity extends AppCompatActivity {
         ).attach();
 
 
+        bottomPanel.measure(
+                View.MeasureSpec.makeMeasureSpec(deviceWidth, View.MeasureSpec.EXACTLY),
+                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
 
+        int extraHeight = bottomPanel.getMeasuredHeight();
+        int buffer = 20;
+        boolean[] pageStates = new boolean[viewPager.getAdapter().getItemCount()];
+        //allow dynamic resizing of fragments as default viewpager2 doesnt support it
         viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
-            public void onPageSelected (int position){
-                super.onPageSelected(position);
-
-                scrollView.setLayoutParams(new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.WRAP_CONTENT));
-
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels){
+                super.onPageScrolled(position, positionOffset, positionOffsetPixels);
                 Fragment currentFragment = getSupportFragmentManager().findFragmentByTag("f"+position);
 
                 if(currentFragment!=null){
@@ -186,15 +202,13 @@ public class ViewProductActivity extends AppCompatActivity {
                             height = f2.getHeight();
                             break;
                     }
-                    if(viewPager.getHeight() < 2*height){
-                        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-                        params.addRule(RelativeLayout.BELOW,tabLayout.getId());
-                        Log.e("TEST",position + "  " + height);
-                        params.height = height * 2;
-                        viewPager.setLayoutParams(params);
-                    }
+                    RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+                    params.addRule(RelativeLayout.BELOW,tabLayout.getId());
+                    params.height = height + extraHeight+buffer;
+                    viewPager.setLayoutParams(params);
                 }
             }
+
         });
 
     }

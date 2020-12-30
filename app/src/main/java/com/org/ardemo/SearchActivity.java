@@ -28,7 +28,7 @@ public class SearchActivity extends AppCompatActivity{
 
     Fragment filterFragment;
     FragmentManager fragmentManager;
-    int width;
+    public static int deviceWidth;
     private String[] filelist;
     ArrayList<Shop> ShopList = new ArrayList<>();
     @Override
@@ -52,9 +52,9 @@ public class SearchActivity extends AppCompatActivity{
         Review reviewC = new Review("loremipsum.txt","Bob Lim", "reviewerC.png", "Shiny", new String[]{"reviewC_1.png","reviewC_2.png","reviewC_3.png"},4.6,new GregorianCalendar(2020, 12, 28).getTime());
         Review reviewD = new Review("loremipsum.txt","John Doe", "reviewerD.png", "Cool", new String[]{"reviewD_1.png"},2.5,new GregorianCalendar(2020, 12, 2).getTime());
 
-        Product productA = new Product("HOUZE - Diato", filelist[0], "HOUSE",86.80, 5.90, true, false, 3.0f,360, 65,true, new Review[]{reviewA}, shopA);
-        Product productB = new Product("Citylife Chait", filelist[1], "Citylife",211.60, 65.70, true, false, 4.0f,2930, 406,true, new Review[]{reviewB, reviewC}, shopB);
-        Product productC = new Product("Best Shop Plane", filelist[2], "Best Shop",2.00, 0.99, false, true, 5.0f,1999, 23,true, new Review[]{reviewD}, shopC);
+        Product productA = new Product("Chair", filelist[0], "HOUSE",86.80, 5.90, true, false, 3.0f,360, 65,true, new Review[]{reviewA}, shopA);
+        Product productB = new Product("Earth", filelist[1], "Citylife",211.60, 65.70, true, false, 4.0f,2930, 406,true, new Review[]{reviewB, reviewC}, shopB);
+        Product productC = new Product("Paper Airplane", filelist[2], "Best Shop",2.00, 0.99, false, true, 5.0f,1999, 23,true, new Review[]{reviewD}, shopC);
 
         ArrayList<Product> productList = new ArrayList<>();
         productList.add(productA);
@@ -63,7 +63,7 @@ public class SearchActivity extends AppCompatActivity{
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        width = displayMetrics.widthPixels;
+        deviceWidth = displayMetrics.widthPixels;
 
         Spinner dropdown = findViewById(R.id.sortDropdown);
         //create a list of items for the spinner.

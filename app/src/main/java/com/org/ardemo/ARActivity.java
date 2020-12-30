@@ -46,6 +46,7 @@ import com.google.ar.sceneform.math.Vector3;
 import com.google.ar.sceneform.rendering.ModelRenderable;
 import com.google.ar.sceneform.ux.ArFragment;
 import com.google.ar.sceneform.ux.TransformableNode;
+import com.org.ardemo.objs.Product;
 import com.org.ardemo.objs.Shop;
 
 import java.io.ByteArrayOutputStream;
@@ -121,6 +122,9 @@ public class ARActivity extends AppCompatActivity {
         builder("NOVELO_EARTH.sfb");
         builder("Chair.sfb");
         autoadded = false;
+
+        Product product = (Product) getIntent().getParcelableExtra("product");
+
         arFragment.setOnTapArPlaneListener((HitResult hitresult, Plane plane, MotionEvent motionevent) -> {
             if (selectedRenderable == null){
                 return;
@@ -460,17 +464,6 @@ public class ARActivity extends AppCompatActivity {
         }, new Handler(handlerThread.getLooper()));
     }
 
-//    @Override
-//    public boolean dispatchTouchEvent(MotionEvent ev) {
-//        Rect ContentBounds = new Rect();
-//        addToCartMenuLayout.getHitRect(ContentBounds);
-//        Rect ContentBounds1 = new Rect();
-//        addToCartMenu.getHitRect(ContentBounds1);
-//        if (!ContentBounds.contains((int) ev.getX(), (int) ev.getY()) && !ContentBounds1.contains((int) ev.getX(), (int) ev.getY())) {
-//            addToCartMenuLayout.setVisibility(View.INVISIBLE);
-//        }
-//        return super.dispatchTouchEvent(ev);
-//    }
 
     public ArrayList<Uri> getImgUriList(){
         ArrayList<Uri> list = new ArrayList<>();

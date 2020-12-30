@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.text.Html;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +28,8 @@ import com.org.ardemo.objs.Shop;
 
 import java.util.ArrayList;
 
+import static com.org.ardemo.SearchActivity.deviceWidth;
+
 
 public class ProductReviewFragment extends Fragment {
     private Integer pos;
@@ -36,7 +39,7 @@ public class ProductReviewFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
+        Log.e("PRODUCT REVIEWs","STARTINGGGGG!!!");
         View view = inflater.inflate(R.layout.product_review_fragment, container, false);
 
         //Product product = (Product) getArguments().get("data");
@@ -96,31 +99,17 @@ public class ProductReviewFragment extends Fragment {
         layoutManager.setScrollEnabled(false);
         recyclerView.setLayoutManager(layoutManager);
  
-        ReviewsAdapter adapter = new ReviewsAdapter(getActivity().getApplicationContext(), product.getReviews(), viewPager, tabLayout, view.findViewById(R.id.reviews));
+        ReviewsAdapter adapter = new ReviewsAdapter(getActivity().getApplicationContext(), product.getReviews());
         recyclerView.setAdapter(adapter);
-
-
-//        View v = ((ViewProductActivity)getActivity()).findViewById(R.id.scrollView);
-//        v.setLayoutParams(new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.WRAP_CONTENT));
-
-//        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false) {
-//            @Override
-//            public void onLayoutCompleted(final RecyclerView.State state) {
-//                super.onLayoutCompleted(state);
-//                recyclerView.setLayoutParams(new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.WRAP_CONTENT));
-//            }
-//        });
-
+        Log.e("PRODUCT REVIEWs","Product Review Fragment CREATED!");
         return view;
     }
 
     public int getHeight(){
-        int height = 0;
-        for(int i = 0; i < recyclerView.getChildCount(); i++){
-            height+=recyclerView.getChildAt(i).getHeight();
-        }
-
-        return height;
+        overall.measure(
+                View.MeasureSpec.makeMeasureSpec(deviceWidth, View.MeasureSpec.EXACTLY),
+                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+        return overall.getMeasuredHeight();
     }
 
     private int[] getRatingCount(Product product){
@@ -145,6 +134,7 @@ public class ProductReviewFragment extends Fragment {
         bundle.putParcelable("data",product);
         bundle.putInt("pageNum", pos);
         fragment.setArguments(bundle);
+        Log.e("PRODUCT REVIEWs","0th STEP!!");
         return fragment;
     }
     @Override
@@ -154,6 +144,7 @@ public class ProductReviewFragment extends Fragment {
             product = (Product) getArguments().get("data");
             pos = getArguments().getInt("pageNum");
         }
+        Log.e("PRODUCT REVIEWs","1st STEP!!");
     }
 
     public class CustomGridLayoutManager extends GridLayoutManager {

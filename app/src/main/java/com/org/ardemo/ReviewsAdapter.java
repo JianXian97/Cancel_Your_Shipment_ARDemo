@@ -40,17 +40,13 @@ import static com.org.ardemo.DemoUtils.format;
 public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ViewHolder> {
 
     Review[] reviewList;
-    private View viewPager, tabLayout, reviewContainer;
     private Context context;
     private ConstraintLayout reviewCell;
 
 //    public ReviewsAdapter(Context context, Review[] reviewList, Context activityContext) {
-    public ReviewsAdapter(Context context, Review[] reviewList, View viewPager, View tabLayout, View reviewContainer) {
+    public ReviewsAdapter(Context context, Review[] reviewList) {
         this.reviewList = reviewList;
         this.context = context;
-        this.viewPager = viewPager;
-        this.tabLayout = tabLayout;
-        this.reviewContainer = reviewContainer;
     }
 
     @Override
@@ -106,21 +102,6 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ViewHold
         viewHolder.dateTime.setText(formattedDate);
 
         viewHolder.rating.setRating((int)Math.round(review.getRating()));
-
-        final float scale = context.getResources().getDisplayMetrics().density;
-        //int pixels = (int) (1000 * scale + 0.5f);
-        int pixels = reviewContainer.getMeasuredHeight();
-
-        //reviewCell.setLayoutParams(new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.WRAP_CONTENT));
-//        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-//        params.addRule(RelativeLayout.BELOW,tabLayout.getId());
-//        params.height = viewPager.getHeight() + 10*200;
-//        viewPager.setLayoutParams(params);
-        //
-//        FragmentManager manager = ((AppCompatActivity)activityContext).getSupportFragmentManager();
-//        Fragment parentFragment  = manager.findFragmentByTag("f2");
-//
-//        parentFragment.getView().setLayoutParams(new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.WRAP_CONTENT));
     }
 
     @Override
