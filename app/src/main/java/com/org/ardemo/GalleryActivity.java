@@ -8,8 +8,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
-import com.org.ardemo.R;
-
 import java.util.ArrayList;
 
 
@@ -53,7 +51,7 @@ public class GalleryActivity  extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         this.finish();
-        Intent i= new Intent(GalleryActivity.this,MainActivity.class);
+        Intent i= new Intent(GalleryActivity.this, ARActivity.class);
         startActivity(i);
         finish();
 

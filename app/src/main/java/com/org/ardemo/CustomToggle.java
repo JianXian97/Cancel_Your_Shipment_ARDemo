@@ -156,4 +156,6 @@ public class CustomToggle extends MarkerButton implements ToggleButton {
             //mTextColorAnimator.reverse();
         }
     }
+
+
 }

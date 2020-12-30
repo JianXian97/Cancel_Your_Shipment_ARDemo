@@ -1,5 +1,6 @@
 package com.org.ardemo;
 
+import android.content.Intent;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -8,12 +9,14 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.ToggleButton;
@@ -21,14 +24,15 @@ import android.widget.ToggleButton;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.idlestar.ratingstar.RatingStarView;
+import com.org.ardemo.fragments.ProductDetailsFragment;
+import com.org.ardemo.fragments.ProductDiscountsFragment;
+import com.org.ardemo.fragments.ProductReviewFragment;
 import com.org.ardemo.objs.Product;
 
 import java.io.InputStream;
@@ -110,7 +114,21 @@ public class ViewProductActivity extends AppCompatActivity {
         if(!product.hasAR()) arIcon.setVisibility(View.GONE);
         shopRating.setRating(product.getShopRating());
 
+        backTopButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                        finish();
+            }
+        });
 
+        ar.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                Intent myIntent = new Intent(v.getContext(), ARActivity.class);
+                myIntent.putExtra("product", (Parcelable) product);
+                startActivity(myIntent);
+            }
+        });
 
         scrollView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
             @Override
@@ -142,27 +160,40 @@ public class ViewProductActivity extends AppCompatActivity {
         ).attach();
 
 
+
         viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected (int position){
                 super.onPageSelected(position);
-                //getAdapter().notifyDataSetChanged();
-                //ViewPagerAdapter adapter = (ViewPagerAdapter) viewPager.getAdapter();
+
                 scrollView.setLayoutParams(new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.WRAP_CONTENT));
-//                getSupportFragmentManager().executePendingTransactions();
-//                getFragmentManager().executePendingTransactions();
-//                Fragment currentFragment = getSupportFragmentManager().findFragmentByTag("f"+position);
-//
-//                if(currentFragment!=null){
-//                    View view = currentFragment.getView();
-//                    Log.e("TEST","234");
-//                    //View view = adapter.list.get(position).getView();
-//                    if(view!=null && viewPager.getLayoutParams().height != view.getMeasuredHeight()){
-//                        viewPager.setLayoutParams(new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.WRAP_CONTENT));
-//                    }
-//                }
 
+                Fragment currentFragment = getSupportFragmentManager().findFragmentByTag("f"+position);
 
+                if(currentFragment!=null){
+                    int height = 0;
+                    switch(position){
+                        case 0:
+                            ProductDetailsFragment f0 = (ProductDetailsFragment) currentFragment;
+                            height = f0.getHeight();
+                            break;
+                        case 1:
+                            ProductReviewFragment f1 = (ProductReviewFragment) currentFragment;
+                            height = f1.getHeight();
+                            break;
+                        case 2:
+                            ProductDiscountsFragment f2 = (ProductDiscountsFragment) currentFragment;
+                            height = f2.getHeight();
+                            break;
+                    }
+                    if(viewPager.getHeight() < 2*height){
+                        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+                        params.addRule(RelativeLayout.BELOW,tabLayout.getId());
+                        Log.e("TEST",position + "  " + height);
+                        params.height = height * 2;
+                        viewPager.setLayoutParams(params);
+                    }
+                }
             }
         });
 
@@ -173,9 +204,6 @@ public class ViewProductActivity extends AppCompatActivity {
         super.onBackPressed();
         this.finish();
     }
-
-
-
 
     public static GradientDrawable drawCircle(int backgroundColor) {
         GradientDrawable shape = new GradientDrawable();

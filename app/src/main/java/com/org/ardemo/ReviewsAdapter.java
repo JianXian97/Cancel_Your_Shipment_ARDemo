@@ -14,13 +14,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.google.android.material.button.MaterialButton;
 import com.idlestar.ratingstar.RatingStarView;
 import com.org.ardemo.objs.Review;
 
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.io.IOException;
@@ -36,12 +40,17 @@ import static com.org.ardemo.DemoUtils.format;
 public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ViewHolder> {
 
     Review[] reviewList;
+    private View viewPager, tabLayout, reviewContainer;
     private Context context;
     private ConstraintLayout reviewCell;
 
-    public ReviewsAdapter(Context context, Review[] reviewList) {
+//    public ReviewsAdapter(Context context, Review[] reviewList, Context activityContext) {
+    public ReviewsAdapter(Context context, Review[] reviewList, View viewPager, View tabLayout, View reviewContainer) {
         this.reviewList = reviewList;
         this.context = context;
+        this.viewPager = viewPager;
+        this.tabLayout = tabLayout;
+        this.reviewContainer = reviewContainer;
     }
 
     @Override
@@ -57,10 +66,7 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ViewHold
         viewHolder.comment.setText(review.getComment());
         viewHolder.profilePicture.setScaleType(ImageView.ScaleType.CENTER_CROP);
         AssetManager assetManager = context.getAssets();
-        ImageView[] mediaLayoutList = new ImageView[3];
-        mediaLayoutList[0] = viewHolder.media1;
-        mediaLayoutList[1] = viewHolder.media2;
-        mediaLayoutList[2] = viewHolder.media3;
+        ImageView[] mediaLayoutList = new ImageView[]{viewHolder.media1, viewHolder.media2, viewHolder.media3};
 
         try{
             String path = "profile-picture/"+review.getProfilePicture();
@@ -72,7 +78,7 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ViewHold
                 path = "review-images/"+review.getMediaNames()[j];
                 is = assetManager.open(path);
                 bitmap = BitmapFactory.decodeStream(is);
-                viewHolder.media1.setImageBitmap(bitmap);
+                mediaLayoutList[j].setImageBitmap(bitmap);
                 Log.d("CHECK", ""+j);
             }
 
@@ -85,7 +91,7 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ViewHold
                 byte[] buffer = new byte[is.available()];
                 is.read(buffer);
                 String comment = new String(buffer, StandardCharsets.UTF_8);
-                Log.d("CHECK123", comment);
+                //Log.d("CHECK123", comment);
                 viewHolder.comment.setText(comment);
             }
 
@@ -99,9 +105,22 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ViewHold
         String formattedDate = new SimpleDateFormat("dd-MM-yyyy HH:mm").format(review.getDateTime());
         viewHolder.dateTime.setText(formattedDate);
 
-        viewHolder.rating.setRating((int)review.getRating().floatValue());
+        viewHolder.rating.setRating((int)Math.round(review.getRating()));
 
-        reviewCell.setLayoutParams(new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.WRAP_CONTENT));
+        final float scale = context.getResources().getDisplayMetrics().density;
+        //int pixels = (int) (1000 * scale + 0.5f);
+        int pixels = reviewContainer.getMeasuredHeight();
+
+        //reviewCell.setLayoutParams(new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.WRAP_CONTENT));
+//        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+//        params.addRule(RelativeLayout.BELOW,tabLayout.getId());
+//        params.height = viewPager.getHeight() + 10*200;
+//        viewPager.setLayoutParams(params);
+        //
+//        FragmentManager manager = ((AppCompatActivity)activityContext).getSupportFragmentManager();
+//        Fragment parentFragment  = manager.findFragmentByTag("f2");
+//
+//        parentFragment.getView().setLayoutParams(new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.WRAP_CONTENT));
     }
 
     @Override
@@ -124,7 +143,7 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ViewHold
             dateTime = view.findViewById(R.id.dateTime);
             variation = view.findViewById(R.id.variation);
             media1 = view.findViewById(R.id.media1);
-            media2 = view.findViewById(R.id.addOnDealTag);
+            media2 = view.findViewById(R.id.media2);
             media3 = view.findViewById(R.id.media3);
             rating = view.findViewById(R.id.reviewRating);
             reviewCell = view.findViewById(R.id.reviewCell);

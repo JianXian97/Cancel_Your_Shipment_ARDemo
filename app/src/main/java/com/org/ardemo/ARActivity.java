@@ -59,8 +59,8 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
-    private static final String TAG = MainActivity.class.getSimpleName();
+public class ARActivity extends AppCompatActivity {
+    private static final String TAG = ARActivity.class.getSimpleName();
     private static final double MIN_OPENGL_VERSION = 3.0;
     private boolean installRequested;
     ImageButton removeButton, addObjectButton, takeImageButton, openGalleryButton, earthIcon, paperAirplaneIcon, chairIcon, addToCartMenu;
@@ -163,7 +163,7 @@ public class MainActivity extends AppCompatActivity {
                     Log.d(TAG, "handleOnTouch hitTestResult.getNode() != null");
                     Node hitNode = hitTestResult.getNode();
                     if (listOfRenderable.contains(hitNode.getRenderable())) {
-                        Toast.makeText(MainActivity.this, "Selected", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ARActivity.this, "Selected", Toast.LENGTH_SHORT).show();
                         selectedAnchorNode = hitNode;
                     }
                 }
@@ -219,7 +219,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 imgUriList = getImgUriList();
-                Intent myIntent = new Intent(MainActivity.this, GalleryActivity.class);
+                Intent myIntent = new Intent(ARActivity.this, GalleryActivity.class);
                 myIntent.putParcelableArrayListExtra("imgUriList", imgUriList); //Optional parameters
                 startActivity(myIntent);
             }
@@ -274,7 +274,7 @@ public class MainActivity extends AppCompatActivity {
                                 //create a new TranformableNode that will carry our object
                                 TransformableNode transformableNode = new TransformableNode(arFragment.getTransformationSystem());
                                 transformableNode.setParent(anchorNode);
-                                transformableNode.setRenderable(MainActivity.this.selectedRenderable);
+                                transformableNode.setRenderable(ARActivity.this.selectedRenderable);
 
                                 //Alter the real world position to ensure object renders on the table top. Not somewhere inside.
                                 transformableNode.setWorldPosition(new Vector3(modelAnchor.getPose().tx(),
@@ -436,7 +436,6 @@ public class MainActivity extends AppCompatActivity {
         Bitmap bitmap = Bitmap.createBitmap(mSurfaceView.getWidth(), mSurfaceView.getHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         mSurfaceView.draw(canvas);
-        Log.d("HELP!@!@!",bitmap.toString());
         // Create a handler thread to offload the processing of the image.
         final HandlerThread handlerThread = new HandlerThread("PixelCopier");
         handlerThread.start();

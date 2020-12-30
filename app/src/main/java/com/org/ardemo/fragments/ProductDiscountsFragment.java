@@ -29,6 +29,10 @@ public class ProductDiscountsFragment extends Fragment {
         return view;
     }
 
+    public int getHeight(){
+        return overall.getHeight();
+    }
+
     @Override
     public void onDetach() {
         super.onDetach();

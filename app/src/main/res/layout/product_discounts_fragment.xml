@@ -1,13 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/overall">
+    android:id="@+id/overall"
+    android:background="#fff">
     <TextView
+        android:id="@+id/shopVouchers"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
-        android:text="TEST"/>
+        android:text="Shop Vouchers"
+        app:layout_constraintStart_toStartOf="parent"
+        android:paddingStart="8dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        />
+    <ImageView
+        android:id="@+id/rightArrow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_baseline_keyboard_arrow_right_24"
+        app:layout_constraintTop_toTopOf="@id/shopVouchers" 
+        app:layout_constraintBottom_toBottomOf="@id/shopVouchers"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.98"/>
+    <ir.beigirad.zigzagview.ZigzagView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:zigzagBackgroundColor="@color/shopeeRed"
+        app:zigzagHeight="2dp"
+        app:zigzagSides="left|right"
+        app:layout_constraintTop_toTopOf="@id/shopVouchers"
+        app:layout_constraintBottom_toBottomOf="@id/shopVouchers"
+        app:layout_constraintEnd_toStartOf="@id/rightArrow"
+        android:layout_marginEnd="8dp"
+       >
+        <ir.beigirad.zigzagview.ZigzagView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:zigzagBackgroundColor="#fff"
+            android:layout_marginTop="1dp"
+            android:layout_marginBottom="1dp"
+            android:layout_marginStart="2dp"
+            android:layout_marginEnd="2dp"
+            app:zigzagSides="left|right"
+            app:zigzagHeight="2dp"
+            android:layout_gravity="center_horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/shopeeRed"
+                android:paddingTop="2dp"
+                android:paddingBottom="2dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:text="$16 OFF"
+                android:textSize="10sp" />
+        </ir.beigirad.zigzagview.ZigzagView>
+    </ir.beigirad.zigzagview.ZigzagView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

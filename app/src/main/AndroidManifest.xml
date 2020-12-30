@@ -19,7 +19,7 @@
             android:name="com.google.ar.core"
             android:value="required" />
         <!--
-        <activity android:name="com.org.ardemo.MainActivity"
+        <activity android:name="com.org.ardemo.ARActivity"
             android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,7 +28,7 @@
 
         </activity>
         -->
-        <activity android:name="com.org.ardemo.MainActivity" />
+        <activity android:name="com.org.ardemo.ARActivity" />
         <activity android:name="com.org.ardemo.GalleryActivity" />
         <activity android:name="com.org.ardemo.ViewImageActivity" />
         <activity android:name="com.org.ardemo.SearchActivity" android:launchMode="singleTop">

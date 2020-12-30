@@ -37,6 +37,7 @@ dependencies {
     implementation 'com.sothree.slidinguppanel:library:3.4.0'
     implementation 'com.github.everhad:AndroidRatingStar:v1.0.4'
     implementation 'com.nex3z:toggle-button-group:1.2.3'
+    implementation 'com.github.beigirad:ZigzagView:1.2.0'
 
 }
 

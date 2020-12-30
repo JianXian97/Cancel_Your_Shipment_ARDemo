@@ -78,7 +78,7 @@
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintHeight_percent="0.9"
+        app:layout_constraintBottom_toTopOf="@id/bottomPanel"
         app:layout_constraintTop_toTopOf="parent"
         android:fillViewport="true">
         <RelativeLayout
@@ -105,7 +105,6 @@
                 android:layout_marginStart="8dp"
                 android:textSize="15dp"
                 android:textColor="#000"/>
-
             <TextView
                 android:id="@+id/discountValue"
                 android:layout_width="wrap_content"
@@ -116,7 +115,6 @@
                 android:textStyle="bold"
                 android:text="TEST"
                 android:layout_marginEnd="8dp"/>
-
             <TextView
                 android:id="@+id/newPrice"
                 android:layout_width="wrap_content"

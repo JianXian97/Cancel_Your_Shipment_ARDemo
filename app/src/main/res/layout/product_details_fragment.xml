@@ -26,7 +26,7 @@
             android:id="@+id/stockCount"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintWidth_percent="0.33"
+            app:layout_constraintWidth_percent="0.5"
             android:text="0"
             app:layout_constraintStart_toEndOf="@id/stockCountName"
             app:layout_constraintTop_toTopOf="parent"/>
@@ -44,7 +44,7 @@
             android:id="@+id/brand"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintWidth_percent="0.33"
+            app:layout_constraintWidth_percent="0.5"
             android:text="BRAND"
             app:layout_constraintStart_toEndOf="@id/brandName"
             app:layout_constraintTop_toBottomOf="@id/stockCountName"/>
@@ -71,7 +71,7 @@
             android:id="@+id/shipsFromAddress"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintWidth_percent="0.33"
+            app:layout_constraintWidth_percent="0.5"
             android:text="Address"
             app:layout_constraintStart_toEndOf="@id/shipsFromName"
             app:layout_constraintTop_toBottomOf="@id/brandName"/>

@@ -1,6 +1,8 @@
 package com.org.ardemo.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.org.ardemo.CreateList;
 import com.org.ardemo.CustomToggle;
 import com.org.ardemo.ReviewsAdapter;
+import com.org.ardemo.ViewProductActivity;
 import com.org.ardemo.objs.Product;
 import com.org.ardemo.R;
 import com.org.ardemo.objs.Review;
@@ -29,6 +32,7 @@ public class ProductReviewFragment extends Fragment {
     private Integer pos;
     Product product;
     ConstraintLayout overall;
+    RecyclerView recyclerView;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -63,28 +67,70 @@ public class ProductReviewFragment extends Fragment {
         threeStars.setMinimumWidth(minWidth);
         twoStars.setMinimumWidth(minWidth);
         oneStar.setMinimumWidth(minWidth);
+        String allButtonText = "<font color=#000000>All<br/></font> <font size = 10pt color=#BE2827>("+product.getReviews().length +")</font>";
+        allReviews.setText(Html.fromHtml(allButtonText));
+        String withCommentButtonText = "<font color=#000000>With Comment<br/></font> <font size = 10pt color=#BE2827>("+product.getReviews().length +")</font>";
+        withComment.setText(Html.fromHtml(withCommentButtonText));
+        String withMediaButtonText = "<font color=#000000>With Media<br/></font> <font size = 10pt color=#BE2827>("+product.getReviews().length +")</font>";
+        withMedia.setText(Html.fromHtml(withMediaButtonText));
+        int[] ratingCount = getRatingCount(product);
+        String fiveStarsText = "<font color=#FFB81D>★★★★★<br/></font> <font size = 10pt color=#545454>("+ratingCount[4] +")</font>";
+        fiveStars.setText(Html.fromHtml(fiveStarsText));
+        String fourStarsText = "<font color=#FFB81D>★★★★<br/></font> <font size = 10pt color=#545454>("+ratingCount[3] +")</font>";
+        fourStars.setText(Html.fromHtml(fourStarsText));
+        String threeStarsText = "<font color=#FFB81D>★★★<br/></font> <font size = 10pt color=#545454>("+ratingCount[2] +")</font>";
+        threeStars.setText(Html.fromHtml(threeStarsText));
+        String twoStarsText = "<font color=#FFB81D>★★<br/></font> <font size = 10pt color=#545454>("+ratingCount[1] +")</font>";
+        twoStars.setText(Html.fromHtml(twoStarsText));
+        String oneStarText = "<font color=#FFB81D>★<br/></font> <font size = 1000pt color=#545454>("+ratingCount[0] +")</font>";
+        oneStar.setText(Html.fromHtml(oneStarText));
 
-        RecyclerView recyclerView = (RecyclerView)view.findViewById(R.id.reviews);
+
+        View viewPager = ((ViewProductActivity)getActivity()).findViewById(R.id.productInfo);
+        View tabLayout = ((ViewProductActivity)getActivity()).findViewById(R.id.tab_layout);
+
+        recyclerView = (RecyclerView)view.findViewById(R.id.reviews);
         recyclerView.setHasFixedSize(true);
 
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getActivity().getApplicationContext(),1);
+        CustomGridLayoutManager layoutManager = new CustomGridLayoutManager(getActivity().getApplicationContext(),1);
+        layoutManager.setScrollEnabled(false);
         recyclerView.setLayoutManager(layoutManager);
  
-        ReviewsAdapter adapter = new ReviewsAdapter(getActivity().getApplicationContext(), product.getReviews());
+        ReviewsAdapter adapter = new ReviewsAdapter(getActivity().getApplicationContext(), product.getReviews(), viewPager, tabLayout, view.findViewById(R.id.reviews));
         recyclerView.setAdapter(adapter);
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false) {
-            @Override
-            public void onLayoutCompleted(final RecyclerView.State state) {
-                super.onLayoutCompleted(state);
-                recyclerView.setLayoutParams(new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.WRAP_CONTENT));
-            }
-        });
+
+//        View v = ((ViewProductActivity)getActivity()).findViewById(R.id.scrollView);
+//        v.setLayoutParams(new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.WRAP_CONTENT));
+
+//        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false) {
+//            @Override
+//            public void onLayoutCompleted(final RecyclerView.State state) {
+//                super.onLayoutCompleted(state);
+//                recyclerView.setLayoutParams(new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.WRAP_CONTENT));
+//            }
+//        });
 
         return view;
     }
 
-  
+    public int getHeight(){
+        int height = 0;
+        for(int i = 0; i < recyclerView.getChildCount(); i++){
+            height+=recyclerView.getChildAt(i).getHeight();
+        }
+
+        return height;
+    }
+
+    private int[] getRatingCount(Product product){
+        int[] result = new int[5];
+        for(Review review: product.getReviews()){
+            int rating = (int)Math.round(review.getRating());
+            result[rating-1]++;
+        }
+        return result;
+    }
 
     @Override
     public void onDetach() {
@@ -110,5 +156,21 @@ public class ProductReviewFragment extends Fragment {
         }
     }
 
+    public class CustomGridLayoutManager extends GridLayoutManager {
+        private boolean isScrollEnabled = true;
 
+        public CustomGridLayoutManager(Context context,int span) {
+            super(context,span);
+        }
+
+        public void setScrollEnabled(boolean flag) {
+            this.isScrollEnabled = flag;
+        }
+
+        @Override
+        public boolean canScrollVertically() {
+            //Similarly you can customize "canScrollHorizontally()" for managing horizontal scroll
+            return isScrollEnabled && super.canScrollVertically();
+        }
+    }
 }
