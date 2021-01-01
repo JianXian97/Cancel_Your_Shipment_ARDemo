@@ -13,11 +13,9 @@ import android.view.ViewGroup;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
-import com.org.ardemo.CreateList;
 import com.org.ardemo.CustomToggle;
 import com.org.ardemo.ReviewsAdapter;
 import com.org.ardemo.ViewProductActivity;
@@ -25,8 +23,6 @@ import com.org.ardemo.objs.Product;
 import com.org.ardemo.R;
 import com.org.ardemo.objs.Review;
 import com.org.ardemo.objs.Shop;
-
-import java.util.ArrayList;
 
 import static com.org.ardemo.SearchActivity.deviceWidth;
 
@@ -39,7 +35,6 @@ public class ProductReviewFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.e("PRODUCT REVIEWs","STARTINGGGGG!!!");
         View view = inflater.inflate(R.layout.product_review_fragment, container, false);
 
         //Product product = (Product) getArguments().get("data");

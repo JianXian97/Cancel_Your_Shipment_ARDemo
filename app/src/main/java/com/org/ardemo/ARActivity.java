@@ -11,6 +11,12 @@ import android.graphics.Canvas;
 import android.net.Uri;
 import android.os.Build;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.recyclerview.widget.LinearSnapHelper;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SnapHelper;
+
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -25,6 +31,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 
 import com.google.ar.core.Anchor;
 import com.google.ar.core.Config;
@@ -46,6 +53,9 @@ import com.google.ar.sceneform.math.Vector3;
 import com.google.ar.sceneform.rendering.ModelRenderable;
 import com.google.ar.sceneform.ux.ArFragment;
 import com.google.ar.sceneform.ux.TransformableNode;
+import com.nex3z.togglebuttongroup.MultiSelectToggleGroup;
+import com.nex3z.togglebuttongroup.SingleSelectToggleGroup;
+import com.nex3z.togglebuttongroup.button.ToggleButton;
 import com.org.ardemo.objs.Product;
 import com.org.ardemo.objs.Shop;
 
@@ -56,20 +66,25 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+
+import static com.org.ardemo.DemoUtils.convertDpToPixel;
+import static com.org.ardemo.DemoUtils.toTitleCase;
+import static com.org.ardemo.SearchActivity.deviceWidth;
+
 
 public class ARActivity extends AppCompatActivity {
     private static final String TAG = ARActivity.class.getSimpleName();
     private static final double MIN_OPENGL_VERSION = 3.0;
     private boolean installRequested;
-    ImageButton removeButton, addObjectButton, takeImageButton, openGalleryButton, earthIcon, paperAirplaneIcon, chairIcon, addToCartMenu;
+    ImageButton removeButton, addObjectButton, takeImageButton, addToCartMenu, backButton;
     ArFragment arFragment;
-    ImageView selectedProduct, shopPicture;
-    TextView price, stock, shopName, shopLastSeen, shopProductCount, shopRating, shopChatResponse;
     LinearLayout addToCartMenuLayout, addToCartMenuLayoutSlider, objChooser, variationPanel;
-    RelativeLayout shopDetails;
+    SingleSelectToggleGroup variationList;
+    TextView productTitle;
     ModelRenderable selectedRenderable;
     private boolean capturePicture = false;
     Node selectedAnchorNode;
@@ -77,53 +92,30 @@ public class ARActivity extends AppCompatActivity {
     private ArSceneView arSceneView;
     private boolean autoadded;
     ArrayList<ModelRenderable> listOfRenderable;
-    ArrayList<Uri> imgUriList;
 
-    String[] productURI = {"paper_airplane.png","earth.png","chair.png"};
-    String[] productPrice = {"100.50","70.90","900.00"};
-    String[] productStock = {"420","18","7"};
-    Shop shopA = new Shop("company_logo_1.png", "Houze", "4 Changi South Lane", 17, 420,73,4.8);
-    Shop shopB = new Shop("company_logo_2.png", "Repoe", "54 Bayfront Avenue Block 12", 23, 982,99,4.7);
-    Shop shopC = new Shop("company_logo_3.jpg", "Origami", "Prince Edward Avenue ",10, 77,89,4.5);
+    Product product;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (!checkIsSupportedDeviceOrFinish(this)) {
             return;
         }
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.ar_activity_layout);
         removeButton = findViewById(R.id.removeButton);
         takeImageButton = findViewById(R.id.takeImage);
-        openGalleryButton = findViewById(R.id.openGallery);
-        earthIcon = findViewById(R.id.globe_icon);
-        paperAirplaneIcon = findViewById(R.id.paperAeroplane_icon);
-        chairIcon = findViewById(R.id.chair_icon);
+        backButton = findViewById(R.id.backButton);
         addToCartMenu = findViewById(R.id.addToCartMenu);
+        productTitle = findViewById(R.id.productTitle);
         arFragment = (ArFragment) getSupportFragmentManager().findFragmentById(R.id.ux_fragment);
         addObject = false;
-        objChooser = findViewById(R.id.objChooser);
-        selectedProduct = findViewById(R.id.selectedProduct);
-        price = findViewById(R.id.price);
-        stock = findViewById(R.id.stockCount);
-        variationPanel = findViewById(R.id.variationPanel);
-        variationPanel.setVisibility(View.INVISIBLE);
-        addToCartMenuLayout = findViewById(R.id.addToCartMenuLayout);
-        addToCartMenuLayoutSlider = findViewById(R.id.addToCartMenuLayoutSlider);
-        shopPicture = findViewById(R.id.shopPicture);
-        shopName = findViewById(R.id.shopName);
-        shopLastSeen = findViewById(R.id.shopLastSeen);
-        shopProductCount = findViewById(R.id.shopProductCount);
-        shopRating = findViewById(R.id.shopRating);
-        shopChatResponse = findViewById(R.id.shopChatResponse);
-        shopDetails = findViewById(R.id.shopDetails);
-        addToCartMenuLayout.setFocusable(true);
+        product = (Product) getIntent().getParcelableExtra("product");
         listOfRenderable = new ArrayList<>();
-        builder("Paper Airplane.sfb");
-        builder("NOVELO_EARTH.sfb");
-        builder("Chair.sfb");
+        builder(product.getTitle()+".sfb");
+        for(String variation : product.getsuggestedProducts()){
+            builder(variation+".sfb");
+        }
         autoadded = false;
-
-        Product product = (Product) getIntent().getParcelableExtra("product");
 
         arFragment.setOnTapArPlaneListener((HitResult hitresult, Plane plane, MotionEvent motionevent) -> {
             if (selectedRenderable == null){
@@ -180,34 +172,13 @@ public class ARActivity extends AppCompatActivity {
                 removeAnchorNode(selectedAnchorNode);
             }
         });
+        backButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                finish();
+            }
+        });
 
-        fillImageButtons(paperAirplaneIcon,productURI[0]);
-        fillImageButtons(earthIcon,productURI[1]);
-        fillImageButtons(chairIcon,productURI[2]);
-        paperAirplaneIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-               selectedRenderable = listOfRenderable.get(0);
-               activateObject("Paper Airplane",0);
-               displayShopInformation(shopC,shopPicture,shopName,shopLastSeen,shopProductCount,shopRating,shopChatResponse);
-            }
-        });
-        earthIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                selectedRenderable = listOfRenderable.get(1);
-                activateObject("Earth",1);
-                displayShopInformation(shopB,shopPicture,shopName,shopLastSeen,shopProductCount,shopRating,shopChatResponse);
-            }
-        });
-        chairIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                selectedRenderable = listOfRenderable.get(2);
-                activateObject("Chair",2);
-                displayShopInformation(shopA,shopPicture,shopName,shopLastSeen,shopProductCount,shopRating,shopChatResponse);
-            }
-        });
         takeImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -219,15 +190,7 @@ public class ARActivity extends AppCompatActivity {
                 }
             }
         });
-        openGalleryButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                imgUriList = getImgUriList();
-                Intent myIntent = new Intent(ARActivity.this, GalleryActivity.class);
-                myIntent.putParcelableArrayListExtra("imgUriList", imgUriList); //Optional parameters
-                startActivity(myIntent);
-            }
-        });
+
         addToCartMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -237,8 +200,62 @@ public class ARActivity extends AppCompatActivity {
         });
         arFragment.getArSceneView().getScene().addOnUpdateListener(this::onUpdateFrame);
 
+        RecyclerView arModelSelector = findViewById(R.id.arModelSelector);
+        CustomLayoutManager pickerLayoutManager = new CustomLayoutManager(this, CustomLayoutManager.HORIZONTAL, false);
+        pickerLayoutManager.setScaleDownBy(0.99f);
+        pickerLayoutManager.setScaleDownDistance(0.5f);
 
+
+        PickerAdapter adapter = new PickerAdapter(this, prepareData(product), arModelSelector);
+        SnapHelper snapHelper = new LinearSnapHelper();
+        snapHelper.attachToRecyclerView(arModelSelector);
+        arModelSelector.setLayoutManager(pickerLayoutManager);
+        arModelSelector.setAdapter(adapter);
+        arModelSelector.setHasFixedSize(true);
+
+        arModelSelector.smoothScrollToPosition(0);
+        pickerLayoutManager.setOnScrollStopListener(new CustomLayoutManager.onScrollStopListener() {
+            @Override
+            public void selectedView(View view) {
+                int pos = pickerLayoutManager.findFirstVisibleItemPosition();
+                if(pos == 0)productTitle.setVisibility(View.INVISIBLE);
+                if(pos > 0){
+                    selectedRenderable = listOfRenderable.get(pos-1);
+                    productTitle.setVisibility(View.VISIBLE);
+                    if(pos == 1)productTitle.setText(product.getTitle());
+                    else{
+                        String name = product.getsuggestedProducts()[pos-2].replace("_"," ");
+                        productTitle.setText(toTitleCase(name));
+                    }
+                }
+            }
+        });
+        SingleSelectToggleGroup variationList = findViewById(R.id.variationList);
+        int eightDp = (int)convertDpToPixel(8,this);
+
+        ConstraintLayout.LayoutParams layout = new ConstraintLayout.LayoutParams(deviceWidth/5,ConstraintLayout.LayoutParams.WRAP_CONTENT);
+        layout.setMargins(eightDp,eightDp,eightDp,eightDp);
+
+        int n = product.getVariations().length;
+        CustomToggle[] toggleList = new CustomToggle[n];
+        for(int i=0; i<n; i++){
+            toggleList[i] =  new CustomToggle(this);
+            toggleList[i].setBackgroundColor(0x50000000);
+            toggleList[i].setSelectedColor(0xFFDC593B);
+            toggleList[i].setSelectedStrokeColor(0xFFDC593B);
+            toggleList[i].setUnselectedStrokeColor(0xFFFFFFFF);
+            toggleList[i].setSelectedStrokeThickness(2);
+            toggleList[i].setUnselectedStrokeThickness(2);
+            toggleList[i].setTextColor(0xFFFFFFFF);
+        }
+        for(int i=0; i<n; i++){
+            toggleList[i].setLayoutParams(layout);
+            toggleList[i].setText(product.getVariations()[i]);
+            variationList.addView(toggleList[i]);
+        }
+        toggleList[0].setSelected(true);
     }
+
     private void onUpdateFrame(FrameTime frameTime) {
         if(!autoadded){
             Frame frame = arFragment.getArSceneView().getArFrame();
@@ -335,37 +352,16 @@ public class ARActivity extends AppCompatActivity {
         }
     }
 
-    private void activateObject(String Object, int position){
-        shopDetails.setVisibility(View.VISIBLE);
-        variationPanel.setVisibility(View.VISIBLE);
-        addToCartMenuLayoutSlider.setVisibility(View.VISIBLE);
-        //Toast.makeText(MainActivity.this, Object + " Object Activated", Toast.LENGTH_SHORT).show();
-
-        AssetManager assetManager = getAssets();
-        try{
-            String path = "ar-images/"+productURI[position];
-            InputStream is = assetManager.open(path);
-            Bitmap bitmap = BitmapFactory.decodeStream(is);
-            selectedProduct.setImageBitmap(bitmap);
-            is.close();
-        }catch(Exception e){
-            e.printStackTrace();
+    private String[] prepareData(Product product){
+        String[] list = new String[product.getsuggestedProducts().length + 2];
+        list[0] = "";
+        list[1] = product.getTitle() +".png";
+        int i = 2;
+        for(String variation : product.getsuggestedProducts()){
+             list[i++] = variation+".png";
         }
-        price.setText("$"+productPrice[position]);
-        stock.setText("Stocks:" + productStock[position]);
-    }
-
-    private void fillImageButtons(ImageButton imgBtn, String imgName){
-        AssetManager assetManager = getAssets();
-        try{
-            String path = "ar-images/"+imgName;
-            InputStream is = assetManager.open(path);
-            Bitmap bitmap = BitmapFactory.decodeStream(is);
-            imgBtn.setImageBitmap(bitmap);
-            is.close();
-        }catch(Exception e){
-            e.printStackTrace();
-        }
+        Log.d("TESTING", Arrays.toString(list));
+        return list;
     }
 
     @Override
@@ -462,37 +458,20 @@ public class ARActivity extends AppCompatActivity {
             }
             handlerThread.quitSafely();
         }, new Handler(handlerThread.getLooper()));
-    }
 
-
-    public ArrayList<Uri> getImgUriList(){
-        ArrayList<Uri> list = new ArrayList<>();
-        File dir = new File(getFilesDir().getAbsolutePath() + File.separator + "/images");
-
-        if(!dir.exists()) dir.mkdirs();
-
-        for(File f : dir.listFiles()) {
-            if (f.isFile()) {
-                list.add(Uri.fromFile(f));
+        String path = "file://"+getFilesDir().getAbsolutePath() + File.separator + "images" +  File.separator + "Img" + timeStamp + ".jpg";
+        Intent myIntent = new Intent(ARActivity.this, ViewImageActivity.class);
+        myIntent.putExtra("imgID", path);
+        myIntent.putExtra("product", product);
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                startActivity(myIntent);
             }
-        }
-        return list;
+        }, 1000);
     }
-    private void displayShopInformation(Shop shop, ImageView shopPicture, TextView shopName, TextView shopLastSeen, TextView shopProductCount, TextView shopRating, TextView shopChatResponse){
-        AssetManager assetManager = getAssets();
-        try{
-            String path = "shop-images/"+shop.getPicture();
-            InputStream is = assetManager.open(path);
-            Bitmap bitmap = BitmapFactory.decodeStream(is);
-            shopPicture.setImageBitmap(bitmap);
-            is.close();
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-        shopName.setText(shop.getName());
-        shopLastSeen.setText("Active " + Integer.toString(shop.getLastSeen()) + " minutes ago");
-        shopProductCount.setText(Integer.toString(shop.getProductCount()));
-        shopChatResponse.setText(Integer.toString(shop.getChatResponse())+"%");
-        shopRating.setText(Double.toString(shop.getRating()));
-    }
+
+
+
 }

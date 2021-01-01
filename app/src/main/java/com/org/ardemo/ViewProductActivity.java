@@ -178,7 +178,7 @@ public class ViewProductActivity extends AppCompatActivity {
 
         int extraHeight = bottomPanel.getMeasuredHeight();
         int buffer = 20;
-        boolean[] pageStates = new boolean[viewPager.getAdapter().getItemCount()];
+//        boolean[] pageStates = new boolean[viewPager.getAdapter().getItemCount()];
         //allow dynamic resizing of fragments as default viewpager2 doesnt support it
         viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override

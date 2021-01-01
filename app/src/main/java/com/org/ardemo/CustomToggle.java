@@ -28,7 +28,13 @@ public class CustomToggle extends MarkerButton implements ToggleButton {
     private static final String LOG_TAG = LabelToggle.class.getSimpleName();
 
     private static final int DEFAULT_ANIMATION_DURATION = 150;
+    private int backgroundColor = Color.parseColor("#EFEFEF"); //default
+    private int selectedColor = Color.parseColor("#FFFFFF"); //default
+    private int selectedStrokeColor = Color.parseColor("#DC593B"); //default
 
+    private int unselectedStrokeColor = Color.parseColor("#00000000"); //default
+    private int selectedStrokeThickness = 1; //default
+    private int unselectedStrokeThickness = 1; //default
     private long mAnimationDuration = DEFAULT_ANIMATION_DURATION;
     private Animation mCheckAnimation;
     private Animation mUncheckAnimation;
@@ -62,6 +68,36 @@ public class CustomToggle extends MarkerButton implements ToggleButton {
         super.setTextColor(colors);
         initAnimation();
     }
+    @Override
+    public void setBackgroundColor(int color) {
+        backgroundColor = color;
+        initBackground();
+    }
+
+    public void setSelectedColor(int selectedColor) {
+        this.selectedColor =  selectedColor;
+        initBackground();
+    }
+
+    public void setSelectedStrokeColor(int selectedStrokeColor) {
+        this.selectedStrokeColor = selectedStrokeColor;
+        initBackground();
+    }
+
+    public void setSelectedStrokeThickness(int selectedStrokeThickness) {
+        this.selectedStrokeThickness = selectedStrokeThickness;
+        initBackground();
+    }
+
+    public void setUnselectedStrokeColor(int unselectedStrokeColor) {
+        this.unselectedStrokeColor = unselectedStrokeColor;
+        initBackground();
+    }
+
+    public void setUnselectedStrokeThickness(int unselectedStrokeThickness) {
+        this.unselectedStrokeThickness = unselectedStrokeThickness;
+        initBackground();
+    }
 
     private void init() {
         initBackground();
@@ -72,21 +108,22 @@ public class CustomToggle extends MarkerButton implements ToggleButton {
     private void initBackground() {
         int shopeeOrange = ContextCompat.getColor(getContext(), R.color.shopeeOrange);
         GradientDrawable checked = new GradientDrawable();
-        checked.setColor(0xFFFFFFFF);
+        checked.setColor(selectedColor);
         checked.setCornerRadius(dpToPx(5));
-        checked.setStroke((int) dpToPx(1), shopeeOrange);
+        checked.setStroke((int) dpToPx(selectedStrokeThickness), selectedStrokeColor);
         mIvBg.setImageDrawable(checked);
 
 
         // Change background
         GradientDrawable background = new GradientDrawable();
-        background.setColor(Color.parseColor("#EFEFEF"));
+        background.setColor(backgroundColor);
         background.setCornerRadius(dpToPx(5));
         // Set background for LabelToggle
         setBackgroundDrawable(background);
 
         GradientDrawable unchecked = new GradientDrawable();
         unchecked.setColor(ContextCompat.getColor(getContext(), android.R.color.transparent));
+        unchecked.setStroke((int) dpToPx(unselectedStrokeThickness), unselectedStrokeColor);
         unchecked.setCornerRadius(dpToPx(5));
         mTvText.setBackgroundDrawable(unchecked);
     }

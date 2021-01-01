@@ -1,4 +1,4 @@
-package com.org.ardemo;
+package com.org.ardemo.objs;
 
 import android.net.Uri;
 

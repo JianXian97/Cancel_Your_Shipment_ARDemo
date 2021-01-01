@@ -12,9 +12,12 @@ public class Product implements Parcelable{
     private int itemsSold, stocks;
     private Boolean supportLocal, addOnDeal, ar;
     private Shop shop;
+    private String[] suggestedProducts, variations;
     private Review[] reviewList;
 
-    public Product(String title, String img, String brand, Double oldPrice, Double newPrice, Boolean supportLocal, Boolean addOnDeal, float shopRating, int itemsSold, int stocks, Boolean ar, Review[] reviewList, Shop shop){
+
+
+    public Product(String title, String img, String brand, Double oldPrice, Double newPrice, Boolean supportLocal, Boolean addOnDeal, float shopRating, int itemsSold, int stocks, Boolean ar, String[] suggestedProducts, String[] variations, Review[] reviewList, Shop shop){
         this.title = title;
         this.img = img;
         this.brand = brand;
@@ -26,8 +29,10 @@ public class Product implements Parcelable{
         this.itemsSold = itemsSold;
         this.stocks = stocks;
         this.ar = ar;
+        this.suggestedProducts = suggestedProducts;
         this.reviewList = reviewList;
         this.shop = shop;
+        this.variations = variations;
     }
     public String getTitle() {return title;}
     public String getImg() {return img;}
@@ -46,8 +51,10 @@ public class Product implements Parcelable{
     public void setShop(Shop shop){this.shop = shop;}
     public Shop getShop(){return this.shop;}
     public Review[] getReviews(){return this.reviewList;}
-
-
+    public String[] getsuggestedProducts() {return suggestedProducts;}
+    public void setsuggestedProducts(String[] suggestedProducts) {this.suggestedProducts = suggestedProducts;}
+    public String[] getVariations() {return variations;}
+    public void setVariations(String[] variations) {this.variations = variations;}
     @Override
     public int describeContents() {
         return 0;
@@ -58,6 +65,8 @@ public class Product implements Parcelable{
     public void writeToParcel(Parcel out, int flags) {
         out.writeTypedArray(reviewList,0);
         out.writeParcelable(shop,flags);
+        out.writeStringArray(suggestedProducts);
+        out.writeStringArray(variations);
         out.writeString(title);
         out.writeString(img);
         out.writeString(brand);
@@ -87,6 +96,8 @@ public class Product implements Parcelable{
     private Product(Parcel in) {
         this.reviewList = in.createTypedArray(Review.CREATOR);
         this.shop = in.readParcelable(Shop.class.getClassLoader());
+        this.suggestedProducts = in.createStringArray();
+        this.variations = in.createStringArray();
         title = in.readString();
         img = in.readString();
         brand = in.readString();

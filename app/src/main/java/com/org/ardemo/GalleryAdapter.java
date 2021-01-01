@@ -1,5 +1,6 @@
 package com.org.ardemo;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -12,7 +13,7 @@ import android.view.View.OnClickListener;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.org.ardemo.R;
+import com.org.ardemo.objs.CreateList;
 
 import java.util.ArrayList;
 
@@ -20,11 +21,14 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
     private ArrayList<CreateList> galleryList;
     private ArrayList<Uri> uriList;
     private Context context;
+    private Activity activity;
+    public static final int REQUESTCODE = 100;
 
-    public GalleryAdapter(Context context, ArrayList<CreateList> galleryList, ArrayList<Uri> imgUriList) {
+    public GalleryAdapter(Context context, ArrayList<CreateList> galleryList, ArrayList<Uri> imgUriList, Activity activity) {
         this.galleryList = galleryList;
         this.context = context;
         this.uriList = imgUriList;
+        this.activity = activity;
     }
 
     @Override
@@ -47,9 +51,15 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
                 Intent myIntent = new Intent(v.getContext(), ViewImageActivity.class);
                 int pos = viewHolder.getLayoutPosition();
                 myIntent.putExtra("imgID", uriList.get(pos).toString());
-                v.getContext().startActivity(myIntent);
+                myIntent.putExtra("position", i);
+                activity.startActivityForResult(myIntent, REQUESTCODE);
             }
         });
+    }
+
+    public void removeAt(int pos){
+        galleryList.remove(pos);
+        uriList.remove(pos);
     }
 
     @Override
