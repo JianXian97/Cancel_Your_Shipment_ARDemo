@@ -50,9 +50,16 @@ import com.google.ar.sceneform.HitTestResult;
 import com.google.ar.sceneform.Node;
 import com.google.ar.sceneform.Scene;
 import com.google.ar.sceneform.math.Vector3;
+import com.google.ar.sceneform.rendering.Color;
+import com.google.ar.sceneform.rendering.MaterialFactory;
 import com.google.ar.sceneform.rendering.ModelRenderable;
+import com.google.ar.sceneform.rendering.ShapeFactory;
+import com.google.ar.sceneform.rendering.Texture;
+import com.google.ar.sceneform.rendering.ViewRenderable;
 import com.google.ar.sceneform.ux.ArFragment;
+import com.google.ar.sceneform.ux.FootprintSelectionVisualizer;
 import com.google.ar.sceneform.ux.TransformableNode;
+import com.google.ar.sceneform.ux.TransformationSystem;
 import com.nex3z.togglebuttongroup.MultiSelectToggleGroup;
 import com.nex3z.togglebuttongroup.SingleSelectToggleGroup;
 import com.nex3z.togglebuttongroup.button.ToggleButton;
@@ -68,8 +75,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import static com.org.ardemo.DemoUtils.convertDpToPixel;
 import static com.org.ardemo.DemoUtils.toTitleCase;
@@ -86,13 +95,16 @@ public class ARActivity extends AppCompatActivity {
     SingleSelectToggleGroup variationList;
     TextView productTitle;
     ModelRenderable selectedRenderable;
+    ViewRenderable selectionVisualiser;
     private boolean capturePicture = false;
     Node selectedAnchorNode;
     boolean addObject, deleteObject;
     private ArSceneView arSceneView;
     private boolean autoadded;
     ArrayList<ModelRenderable> listOfRenderable;
-
+    int noOfNodes = 0;
+    Map<String, String> colorMap = new HashMap<String, String>();
+    int[] idList;
     Product product;
 
     @Override
@@ -101,37 +113,81 @@ public class ARActivity extends AppCompatActivity {
         if (!checkIsSupportedDeviceOrFinish(this)) {
             return;
         }
+        fillColorMap();
         setContentView(R.layout.ar_activity_layout);
         removeButton = findViewById(R.id.removeButton);
         takeImageButton = findViewById(R.id.takeImage);
         backButton = findViewById(R.id.backButton);
         addToCartMenu = findViewById(R.id.addToCartMenu);
         productTitle = findViewById(R.id.productTitle);
+        variationList = findViewById(R.id.variationList);
         arFragment = (ArFragment) getSupportFragmentManager().findFragmentById(R.id.ux_fragment);
         addObject = false;
         product = (Product) getIntent().getParcelableExtra("product");
         listOfRenderable = new ArrayList<>();
         builder(product.getTitle()+".sfb");
-        for(String variation : product.getsuggestedProducts()){
-            builder(variation+".sfb");
+        for(Product variation : product.getsuggestedProducts()){
+            builder(variation.getTitle()+".sfb");
         }
         autoadded = false;
 
         arFragment.setOnTapArPlaneListener((HitResult hitresult, Plane plane, MotionEvent motionevent) -> {
-            if (selectedRenderable == null){
+            if (selectedRenderable == null || noOfNodes > 0){
                 return;
             }
             Anchor anchor = hitresult.createAnchor();
             AnchorNode anchorNode = new AnchorNode(anchor);
             anchorNode.setParent(arFragment.getArSceneView().getScene());
-            TransformableNode globe = new TransformableNode(arFragment.getTransformationSystem());
-            globe.setParent(anchorNode);
-            globe.setRenderable(selectedRenderable);
-            globe.select();
+            TransformableNode node = new TransformableNode(arFragment.getTransformationSystem());
+            node.getScaleController().setMaxScale(0.5001f);
+            node.getScaleController().setMinScale(0.5f);
+            node.setParent(anchorNode);
+            node.setLocalScale(new Vector3(0.1f, 0.1f, 0.1f));
+            node.setRenderable(selectedRenderable);
+            node.select();
+            selectedAnchorNode = node;
+            noOfNodes++;
             }
         );
 
         Scene scene = arFragment.getArSceneView().getScene();
+
+        CustomSelectionVisualiser footprintSelectionVisualizer = new CustomSelectionVisualiser();
+        TransformationSystem transformationSystem = arFragment.getTransformationSystem();
+        transformationSystem.setSelectionVisualizer(footprintSelectionVisualizer);
+        ViewRenderable.builder()
+                .setView(this, R.layout.selector_visualiser_layout)
+                .build()
+                .thenAccept(renderable -> selectionVisualiser = renderable)
+                .exceptionally(throwable -> {
+                    Toast toast =
+                            Toast.makeText(this, "Unable to load any renderable", Toast.LENGTH_LONG);
+                    toast.setGravity(Gravity.CENTER, 0, 0);
+                    toast.show();
+                    return null;
+                });
+
+//        Vector3 vector3 = new Vector3(0.01f,0.5f,0.5f);
+//        MaterialFactory.makeTransparentWithColor(this,new Color(220,289,59,255))
+//                .thenAccept(
+//                        material -> {
+//                            selectionVisualiser = ShapeFactory.makeCylinder(0.5f,0.01f,Vector3.zero(),material);
+//
+//                        });
+
+//        ModelRenderable.builder()
+//                .setSource(this, Uri.parse("Ring.sfb"))
+//                .build()
+//                .thenAccept(renderable -> selectionVisualiser = renderable)
+//                .exceptionally(throwable -> {
+//                    Toast toast =
+//                            Toast.makeText(this, "Unable to load any renderable", Toast.LENGTH_LONG);
+//                    toast.setGravity(Gravity.CENTER, 0, 0);
+//                    toast.show();
+//                    return null;
+//                });
+
+
         try{
             Session session = new Session(this);
             com.google.ar.core.Config config = new com.google.ar.core.Config(session);
@@ -170,6 +226,7 @@ public class ARActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 removeAnchorNode(selectedAnchorNode);
+                noOfNodes--;
             }
         });
         backButton.setOnClickListener(new View.OnClickListener(){
@@ -198,7 +255,7 @@ public class ARActivity extends AppCompatActivity {
                  else addToCartMenuLayout.setVisibility(View.INVISIBLE);
             }
         });
-        arFragment.getArSceneView().getScene().addOnUpdateListener(this::onUpdateFrame);
+        //arFragment.getArSceneView().getScene().addOnUpdateListener(this::onUpdateFrame);
 
         RecyclerView arModelSelector = findViewById(R.id.arModelSelector);
         CustomLayoutManager pickerLayoutManager = new CustomLayoutManager(this, CustomLayoutManager.HORIZONTAL, false);
@@ -218,43 +275,70 @@ public class ARActivity extends AppCompatActivity {
             @Override
             public void selectedView(View view) {
                 int pos = pickerLayoutManager.findFirstVisibleItemPosition();
-                if(pos == 0)productTitle.setVisibility(View.INVISIBLE);
+                if(pos == 0) {
+                    selectedRenderable = null;
+                    productTitle.setVisibility(View.INVISIBLE);
+                    variationList.removeAllViews();
+                }
                 if(pos > 0){
                     selectedRenderable = listOfRenderable.get(pos-1);
                     productTitle.setVisibility(View.VISIBLE);
-                    if(pos == 1)productTitle.setText(product.getTitle());
+
+                    if(pos == 1) {
+                        productTitle.setText(product.getTitle());
+                        idList = generateVariations(product);
+                        Log.e("Generated Variation", "Generated!");
+
+                    }
                     else{
-                        String name = product.getsuggestedProducts()[pos-2].replace("_"," ");
+                        String name = product.getsuggestedProducts()[pos-2].getTitle().replace("_"," ");
                         productTitle.setText(toTitleCase(name));
+                        idList = generateVariations(product.getsuggestedProducts()[pos-2]);
+                    }
+                 }
+                if (footprintSelectionVisualizer  != null) {
+//                    selectionVisualiser.getMaterial().setFloat3("baseColorTint",
+//                            new Color(android.graphics.Color.parseColor("#DC593B")));
+                    if(selectionVisualiser!=null) {
+                        selectionVisualiser.setHorizontalAlignment(ViewRenderable.HorizontalAlignment.CENTER);
+                        selectionVisualiser.setVerticalAlignment(ViewRenderable.VerticalAlignment.CENTER);
+
+                        footprintSelectionVisualizer.setFootprintRenderable(selectionVisualiser);
                     }
                 }
             }
         });
-        SingleSelectToggleGroup variationList = findViewById(R.id.variationList);
-        int eightDp = (int)convertDpToPixel(8,this);
+        variationList.setOnCheckedChangeListener(new SingleSelectToggleGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(SingleSelectToggleGroup group, int checkedId) {
+                String color = getVariation();
+                if(selectedAnchorNode != null) {//placed object, then select variation
+                    if(color != null){
+                        ModelRenderable newColorSelectedRenderable = selectedRenderable.makeCopy();
 
-        ConstraintLayout.LayoutParams layout = new ConstraintLayout.LayoutParams(deviceWidth/5,ConstraintLayout.LayoutParams.WRAP_CONTENT);
-        layout.setMargins(eightDp,eightDp,eightDp,eightDp);
+                        newColorSelectedRenderable.getMaterial().setFloat3("baseColorTint",
+                                new Color(android.graphics.Color.parseColor(color)));
+                        selectedAnchorNode.setLocalScale(new Vector3(0.001f, 0.001f, 0.001f));
+                        selectedAnchorNode.setRenderable(newColorSelectedRenderable);
+                    }
+                    else{
+                        selectedAnchorNode.setRenderable(selectedRenderable);
+                    }
+                }
+                else{//select variation, haven't place object
+                    if(color != null) {
+                        selectedRenderable.getMaterial().setFloat3("baseColorTint",
+                                new Color(android.graphics.Color.parseColor(color)));
+                        Log.e("Changed Color","Changed Color");
+                    }
+                }
 
-        int n = product.getVariations().length;
-        CustomToggle[] toggleList = new CustomToggle[n];
-        for(int i=0; i<n; i++){
-            toggleList[i] =  new CustomToggle(this);
-            toggleList[i].setBackgroundColor(0x50000000);
-            toggleList[i].setSelectedColor(0xFFDC593B);
-            toggleList[i].setSelectedStrokeColor(0xFFDC593B);
-            toggleList[i].setUnselectedStrokeColor(0xFFFFFFFF);
-            toggleList[i].setSelectedStrokeThickness(2);
-            toggleList[i].setUnselectedStrokeThickness(2);
-            toggleList[i].setTextColor(0xFFFFFFFF);
-        }
-        for(int i=0; i<n; i++){
-            toggleList[i].setLayoutParams(layout);
-            toggleList[i].setText(product.getVariations()[i]);
-            variationList.addView(toggleList[i]);
-        }
-        toggleList[0].setSelected(true);
+            }
+        });
+
+
     }
+
 
     private void onUpdateFrame(FrameTime frameTime) {
         if(!autoadded){
@@ -295,6 +379,7 @@ public class ARActivity extends AppCompatActivity {
                                 //create a new TranformableNode that will carry our object
                                 TransformableNode transformableNode = new TransformableNode(arFragment.getTransformationSystem());
                                 transformableNode.setParent(anchorNode);
+                                transformableNode.setLocalScale(new Vector3(0.1f, 0.1f, 0.1f));
                                 transformableNode.setRenderable(ARActivity.this.selectedRenderable);
 
                                 //Alter the real world position to ensure object renders on the table top. Not somewhere inside.
@@ -312,6 +397,45 @@ public class ARActivity extends AppCompatActivity {
 
     }
 
+    private int[] generateVariations(Product product){
+        int eightDp = (int)convertDpToPixel(8,this);
+        ConstraintLayout.LayoutParams layout = new ConstraintLayout.LayoutParams(deviceWidth/5,ConstraintLayout.LayoutParams.WRAP_CONTENT);
+        layout.setMargins(eightDp,eightDp,eightDp,eightDp);
+        variationList.removeAllViews();
+        int n = product.getVariations().length;
+        int[] idList = new int[n];
+        CustomToggle[] toggleList = new CustomToggle[n];
+        for(int i=0; i<n; i++){
+            toggleList[i] =  new CustomToggle(this);
+            toggleList[i].setBackgroundColor(0x50000000);
+            toggleList[i].setSelectedColor(0xFFDC593B);
+            toggleList[i].setSelectedStrokeColor(0xFFDC593B);
+            toggleList[i].setUnselectedStrokeColor(0xFFFFFFFF);
+            toggleList[i].setSelectedStrokeThickness(2);
+            toggleList[i].setUnselectedStrokeThickness(2);
+            toggleList[i].setTextColor(0xFFFFFFFF);
+            toggleList[i].setcheckedTextColor(0xFFFFFFFF);
+        }
+
+        for(int i=0; i<n; i++){
+            toggleList[i].setLayoutParams(layout);
+            toggleList[i].setText(product.getVariations()[i]);
+            int id = View.generateViewId();
+            toggleList[i].setId(id);
+            idList[i] = id;
+            variationList.addView(toggleList[i]);
+        }
+        toggleList[0].setChecked(true);
+        return idList;
+    }
+
+    private String getVariation(){
+        int childId = variationList.getCheckedId();
+        CustomToggle child = (CustomToggle) variationList.findViewById(childId);
+        String color = colorMap.get(child.getText());
+        if(color != null) return color;
+        else return null;
+    }
     private Vector3 getScreenCenter() {
         View vw = findViewById(android.R.id.content);
         return new Vector3((vw.getWidth() / 2f), vw.getHeight() / 2f, 0f);
@@ -357,8 +481,8 @@ public class ARActivity extends AppCompatActivity {
         list[0] = "";
         list[1] = product.getTitle() +".png";
         int i = 2;
-        for(String variation : product.getsuggestedProducts()){
-             list[i++] = variation+".png";
+        for(Product variation : product.getsuggestedProducts()){
+             list[i++] = variation.getTitle()+".png";
         }
         Log.d("TESTING", Arrays.toString(list));
         return list;
@@ -472,6 +596,12 @@ public class ARActivity extends AppCompatActivity {
         }, 1000);
     }
 
-
+    public void fillColorMap(){
+        colorMap.put("Grey", "#FF898989");
+        colorMap.put("Black","#FF000000");
+        colorMap.put("White","#FFFFFFFF");
+        colorMap.put("Purple","#FF8d32a8");
+        colorMap.put("Red","#FFd9251e");
+    }
 
 }

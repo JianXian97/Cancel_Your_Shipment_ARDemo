@@ -52,9 +52,12 @@ public class SearchActivity extends AppCompatActivity{
         Review reviewC = new Review("loremipsum.txt","Bob Lim", "reviewerC.png", "Shiny", new String[]{"reviewC_1.png","reviewC_2.png","reviewC_3.png"},4.6,new GregorianCalendar(2020, 12, 28).getTime());
         Review reviewD = new Review("loremipsum.txt","John Doe", "reviewerD.png", "Cool", new String[]{"reviewD_1.png"},2.5,new GregorianCalendar(2020, 12, 2).getTime());
 
-        Product productA = new Product("Chair", filelist[0], "HOUSE",86.80, 5.90, true, false, 3.0f,360, 65,true, new String[]{"CHAHIN_WOODEN_CHAIR","High Top Chair"}, new String[]{"Blue","White","Purple"},new Review[]{reviewA}, shopA);
-        Product productB = new Product("Earth", filelist[1], "Citylife",211.60, 65.70, true, false, 4.0f,2930, 406,true, new String[]{}, new String[]{"Red","White"}, new Review[]{reviewB, reviewC}, shopB);
-        Product productC = new Product("Paper Airplane", filelist[2], "Best Shop",2.00, 0.99, false, true, 5.0f,1999, 23,true, new String[]{}, new String[]{"Shiny","Cool"}, new Review[]{reviewD}, shopC);
+        Product productD = new Product("CHAHIN_WOODEN_CHAIR", filelist[3], "HOUSE",342.00, 184.50, true, false, 3.0f,100, 25,true, new Product[]{}, new String[]{"Black","Grey"},new Review[]{}, shopA);
+        Product productE = new Product("High Top Chair", filelist[4], "HOUSE",392.00, 300.00, true, false, 3.0f,850, 35,true, new Product[]{}, new String[]{"Brown","Black"},new Review[]{}, shopA);
+        Product productA = new Product("Chair", filelist[0], "HOUSE",86.80, 5.90, true, false, 3.0f,360, 65,true, new Product[]{productD,productE}, new String[]{"Green","White","Purple"},new Review[]{reviewA}, shopA);
+        Product productB = new Product("Earth", filelist[1], "Citylife",211.60, 65.70, true, false, 4.0f,2930, 406,true, new Product[]{}, new String[]{"Green","Red"}, new Review[]{reviewB, reviewC}, shopB);
+        Product productC = new Product("Paper Airplane", filelist[2], "Best Shop",2.00, 0.99, false, true, 5.0f,1999, 23,true, new Product[]{}, new String[]{"White","Black"}, new Review[]{reviewD}, shopC);
+
 
         ArrayList<Product> productList = new ArrayList<>();
         productList.add(productA);

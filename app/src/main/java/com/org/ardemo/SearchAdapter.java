@@ -79,7 +79,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         if(!product.addingOn()) viewHolder.addOnDeal.setVisibility(View.GONE);
         if(!product.hasAR()) viewHolder.ar.setVisibility(View.GONE);
 
-        viewHolder.shopRating.setRating(product.getShopRating());
+        viewHolder.shopRating.setRating(product.getProductRating());
 
         viewHolder.panel.setOnClickListener(new View.OnClickListener() {
             @Override

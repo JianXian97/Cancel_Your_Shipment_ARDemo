@@ -24,13 +24,10 @@ public class ViewPagerAdapter extends FragmentStateAdapter {
     public Fragment createFragment(int Position) {
         switch(Position){
             case 0:
-                Log.e("PAGER ADAPTER", "position " + Position + " is called");
                 return ProductDetailsFragment.newInstance(Position, product);
             case 1:
-                Log.e("PAGER ADAPTER", "position " + Position + " is called");
                 return ProductReviewFragment.newInstance(Position, product);
             case 2:
-                Log.e("PAGER ADAPTER", "position " + Position + " is called");
                 return ProductDiscountsFragment.newInstance(Position, product);
         }
         return ProductReviewFragment.newInstance(Position, product);

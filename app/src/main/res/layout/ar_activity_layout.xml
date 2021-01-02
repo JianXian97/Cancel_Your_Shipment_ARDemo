@@ -20,8 +20,7 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:tint="#fff"
-        android:background="@drawable/round_button_border"
-        android:backgroundTint="#898989"
+        android:background="@drawable/round_button_border_thin"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -40,8 +39,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.975"
         app:layout_constraintVertical_bias="0.025"
-        android:background="@drawable/round_button"
-        android:backgroundTint="#898989"
+        android:background="@drawable/round_button_border_thin"
         android:tint="#fff"
         android:src="@drawable/ic_baseline_close_24" />
 
@@ -66,7 +64,7 @@
         android:layout_height="80dp"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
-        android:background="@drawable/round_button_border"
+        android:background="@drawable/round_button_border_thin"
         app:layout_constraintTop_toTopOf="@id/arModelSelector"
         app:layout_constraintBottom_toBottomOf="@id/arModelSelector"
         app:layout_constraintStart_toStartOf="parent"
@@ -90,7 +88,7 @@
         android:layout_height="40dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:background="@drawable/round_button_border"
+        android:background="@drawable/round_button_border_thin"
 
         android:layout_marginTop="10dp"
         android:src="@drawable/ic_baseline_add_shopping_cart_24"

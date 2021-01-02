@@ -115,7 +115,7 @@ public class ViewProductActivity extends AppCompatActivity {
         newPrice.setText("$"+String.format("%.2f",product.getNewPrice()));
         itemsSold.setText(format(product.getItemsSold()) + " sold");
         if(!product.hasAR()) arIcon.setVisibility(View.GONE);
-        shopRating.setRating(product.getShopRating());
+        shopRating.setRating(product.getProductRating());
 
         backTopButton.setOnClickListener(new View.OnClickListener(){
             @Override

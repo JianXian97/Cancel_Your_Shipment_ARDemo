@@ -84,10 +84,7 @@ public class PickerAdapter extends RecyclerView.Adapter<PickerAdapter.ImageHolde
             @Override
             public void onClick(View v) {
                 if (recyclerView != null) {
-//                    recyclerView.smoothScrollToPosition(position);
-                    Log.e("POSITION", ""+position);
-                    CustomLayoutManager layoutManager = (CustomLayoutManager) recyclerView.getLayoutManager();
-                    layoutManager.scrollToPosition(position);
+                    recyclerView.smoothScrollToPosition(position);
                 }
             }
         });

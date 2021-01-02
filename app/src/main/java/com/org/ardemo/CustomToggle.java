@@ -31,6 +31,7 @@ public class CustomToggle extends MarkerButton implements ToggleButton {
     private int backgroundColor = Color.parseColor("#EFEFEF"); //default
     private int selectedColor = Color.parseColor("#FFFFFF"); //default
     private int selectedStrokeColor = Color.parseColor("#DC593B"); //default
+    private int checkedTextColor = Color.parseColor("#000000"); //default
 
     private int unselectedStrokeColor = Color.parseColor("#00000000"); //default
     private int selectedStrokeThickness = 1; //default
@@ -60,6 +61,12 @@ public class CustomToggle extends MarkerButton implements ToggleButton {
     @Override
     public void setTextColor(int color) {
         super.setTextColor(color);
+        initAnimation();
+    }
+
+
+    public void setcheckedTextColor(int color) {
+        this.checkedTextColor = color;
         initAnimation();
     }
 
@@ -118,12 +125,13 @@ public class CustomToggle extends MarkerButton implements ToggleButton {
         GradientDrawable background = new GradientDrawable();
         background.setColor(backgroundColor);
         background.setCornerRadius(dpToPx(5));
+        background.setStroke((int) dpToPx(unselectedStrokeThickness), unselectedStrokeColor);
         // Set background for LabelToggle
         setBackgroundDrawable(background);
 
         GradientDrawable unchecked = new GradientDrawable();
         unchecked.setColor(ContextCompat.getColor(getContext(), android.R.color.transparent));
-        unchecked.setStroke((int) dpToPx(unselectedStrokeThickness), unselectedStrokeColor);
+        //unchecked.setStroke((int) dpToPx(unselectedStrokeThickness), unselectedStrokeColor);
         unchecked.setCornerRadius(dpToPx(5));
         mTvText.setBackgroundDrawable(unchecked);
     }
@@ -136,7 +144,7 @@ public class CustomToggle extends MarkerButton implements ToggleButton {
     private void initAnimation() {
         final int defaultTextColor = getDefaultTextColor();
 //        final int checkedTextColor = getCheckedTextColor();
-        final int checkedTextColor = 0xFF000000;
+       // final int checkedTextColor = 0xFF000000;
         Log.v(LOG_TAG, "initAnimation(): defaultTextColor = " + defaultTextColor + ", checkedTextColor = " + checkedTextColor);
 
         mTextColorAnimator = ValueAnimator.ofObject(
@@ -192,6 +200,10 @@ public class CustomToggle extends MarkerButton implements ToggleButton {
             mIvBg.startAnimation(mUncheckAnimation);
             //mTextColorAnimator.reverse();
         }
+    }
+
+    public String getText(){
+        return super.getText().toString();
     }
 
 

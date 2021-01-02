@@ -2,10 +2,13 @@ package com.org.ardemo;
 
 import android.content.Context;
 
+import android.graphics.PointF;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.RecyclerView;
 
 /**
@@ -74,11 +77,17 @@ public class CustomLayoutManager extends LinearLayoutManager {
         }
     }
 
+
     @Override
-    public void scrollToPosition(int position){
-        View child = getChildAt(position);
-        super.scrollToPositionWithOffset(position, (int) (-0.72*child.getWidth()));
-        scaleDownView();
+    public void smoothScrollToPosition(RecyclerView recyclerView, RecyclerView.State state, int position) {
+        final LinearSmoothScroller linearSmoothScroller = new LinearSmoothScroller(recyclerView.getContext()) {
+            @Override
+            public int calculateDtToFit(int viewStart, int viewEnd, int boxStart, int boxEnd, int snapPreference) {
+                return (boxStart + (boxEnd - boxStart) / 2) - (viewStart + (viewEnd - viewStart) / 2);
+            }
+        };
+        linearSmoothScroller.setTargetPosition(position);
+        startSmoothScroll(linearSmoothScroller);
     }
 
     public float getScaleDownBy() {
