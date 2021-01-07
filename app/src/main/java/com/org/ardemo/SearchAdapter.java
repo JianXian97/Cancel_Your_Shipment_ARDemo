@@ -101,7 +101,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
     public class ViewHolder extends RecyclerView.ViewHolder{
         private TextView title, oldPrice, newPrice, itemsSold, discountValue;
         private MaterialButton supportLocal, addOnDeal;
-        private ImageView img,ar;
+        public ImageView img,ar;
         private RatingStarView shopRating;
         ConstraintLayout panel, labelsPanel;
         public ViewHolder(View view) {

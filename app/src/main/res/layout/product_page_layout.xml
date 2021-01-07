@@ -205,9 +205,9 @@
                 android:backgroundTint="#00000000"
                 android:text="15 Days Return\*"
                 android:textColor="#898989"
-                android:textSize="9sp"
+                android:textSize="8.5sp"
                 android:minHeight="0dp"
-                android:padding="-5dp"
+                android:padding="-7dp"
                 android:drawableLeft="@drawable/ic_resource_return"
                 app:iconTint="@color/shopeeRed"
                 android:inputType="text"/>
@@ -224,9 +224,9 @@
                 android:backgroundTint="#00000000"
                 android:text="100% Authentic"
                 android:textColor="#898989"
-                android:textSize="9sp"
+                android:textSize="8.5sp"
                 android:minHeight="0dp"
-                android:padding="-5dp"
+                android:padding="-7dp"
                 android:drawableLeft="@drawable/ic_verified"
                 app:iconTint="@color/shopeeRed"
                 android:inputType="text"/>
@@ -243,9 +243,9 @@
                 android:backgroundTint="#00000000"
                 android:text="Free Shipping"
                 android:textColor="#898989"
-                android:textSize="9sp"
+                android:textSize="8.5sp"
                 android:minHeight="0dp"
-                android:padding="-5dp"
+                android:padding="-7dp"
                 android:drawableLeft="@drawable/ic_baseline_local_shipping_24"
                 app:iconTint="@color/shopeeRed"
                 android:inputType="text"/>
@@ -349,5 +349,37 @@
             android:background="@color/shopeeRed"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/instructionPanel"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ImageView
+            android:id="@+id/instructions"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColor="#fff"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintWidth_percent="0.8"
+            app:layout_constraintVertical_bias="0.85"
+            android:textAlignment="center"
+            android:textSize="20dp"
+            android:text="Click on either of the AR Icons to view in AR mode"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#fff"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintVertical_bias="0.2"
+            android:textSize="20dp"
+            android:text="Click anywhere to continue"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

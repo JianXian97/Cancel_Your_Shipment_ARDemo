@@ -8,6 +8,9 @@ import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
 import android.net.Uri;
 import android.os.Build;
 import androidx.appcompat.app.AppCompatActivity;
@@ -82,6 +85,7 @@ import java.util.Map;
 
 import static com.org.ardemo.DemoUtils.convertDpToPixel;
 import static com.org.ardemo.DemoUtils.toTitleCase;
+import static com.org.ardemo.SearchActivity.deviceHeight;
 import static com.org.ardemo.SearchActivity.deviceWidth;
 
 
@@ -102,11 +106,14 @@ public class ARActivity extends AppCompatActivity {
     private ArSceneView arSceneView;
     private boolean autoadded;
     ArrayList<ModelRenderable> listOfRenderable;
+    Map<String, ModelRenderable> renderableMap = new HashMap<String, ModelRenderable>();
     int noOfNodes = 0;
     Map<String, String> colorMap = new HashMap<String, String>();
     int[] idList;
     Product product;
-
+    ImageView instructions, instructions2;
+    ConstraintLayout searchBar, instructionPanel, instructionPanel2;
+    RecyclerView arModelSelector;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -167,25 +174,26 @@ public class ARActivity extends AppCompatActivity {
                     return null;
                 });
 
-//        Vector3 vector3 = new Vector3(0.01f,0.5f,0.5f);
-//        MaterialFactory.makeTransparentWithColor(this,new Color(220,289,59,255))
-//                .thenAccept(
-//                        material -> {
-//                            selectionVisualiser = ShapeFactory.makeCylinder(0.5f,0.01f,Vector3.zero(),material);
-//
-//                        });
+        instructions = findViewById(R.id.instructions);
+        instructions2 = findViewById(R.id.instructions2);
+        instructionPanel = findViewById(R.id.instructionPanel);
+        instructionPanel2 = findViewById(R.id.instructionPanel2);
 
-//        ModelRenderable.builder()
-//                .setSource(this, Uri.parse("Ring.sfb"))
-//                .build()
-//                .thenAccept(renderable -> selectionVisualiser = renderable)
-//                .exceptionally(throwable -> {
-//                    Toast toast =
-//                            Toast.makeText(this, "Unable to load any renderable", Toast.LENGTH_LONG);
-//                    toast.setGravity(Gravity.CENTER, 0, 0);
-//                    toast.show();
-//                    return null;
-//                });
+        instructionPanel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                instructionPanel.setVisibility(View.INVISIBLE);
+                instructionPanel2.setVisibility(View.VISIBLE);
+                displayInstructions();
+            }
+        });
+
+        instructionPanel2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                instructionPanel2.setVisibility(View.INVISIBLE);
+            }
+        });
 
 
         try{
@@ -214,7 +222,7 @@ public class ARActivity extends AppCompatActivity {
                 if (hitTestResult.getNode() != null) {
                     Log.d(TAG, "handleOnTouch hitTestResult.getNode() != null");
                     Node hitNode = hitTestResult.getNode();
-                    if (listOfRenderable.contains(hitNode.getRenderable())) {
+                    if (renderableMap.containsValue(hitNode.getRenderable())) {
                         Toast.makeText(ARActivity.this, "Selected", Toast.LENGTH_SHORT).show();
                         selectedAnchorNode = hitNode;
                     }
@@ -248,20 +256,12 @@ public class ARActivity extends AppCompatActivity {
             }
         });
 
-        addToCartMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                 if(addToCartMenuLayout.getVisibility() == View.INVISIBLE) addToCartMenuLayout.setVisibility(View.VISIBLE);
-                 else addToCartMenuLayout.setVisibility(View.INVISIBLE);
-            }
-        });
         //arFragment.getArSceneView().getScene().addOnUpdateListener(this::onUpdateFrame);
 
-        RecyclerView arModelSelector = findViewById(R.id.arModelSelector);
+        arModelSelector = findViewById(R.id.arModelSelector);
         CustomLayoutManager pickerLayoutManager = new CustomLayoutManager(this, CustomLayoutManager.HORIZONTAL, false);
         pickerLayoutManager.setScaleDownBy(0.99f);
         pickerLayoutManager.setScaleDownDistance(0.5f);
-
 
         PickerAdapter adapter = new PickerAdapter(this, prepareData(product), arModelSelector);
         SnapHelper snapHelper = new LinearSnapHelper();
@@ -281,20 +281,26 @@ public class ARActivity extends AppCompatActivity {
                     variationList.removeAllViews();
                 }
                 if(pos > 0){
-                    selectedRenderable = listOfRenderable.get(pos-1);
-                    productTitle.setVisibility(View.VISIBLE);
+//                    selectedRenderable = listOfRenderable.get(pos-1);
 
+                    productTitle.setVisibility(View.VISIBLE);
+                    String key;
                     if(pos == 1) {
+                        key = product.getTitle()+".sfb";
+                        selectedRenderable = renderableMap.get(key);
                         productTitle.setText(product.getTitle());
                         idList = generateVariations(product);
                         Log.e("Generated Variation", "Generated!");
 
                     }
                     else{
+                        key = product.getsuggestedProducts()[pos-2].getTitle()+".sfb";
+                        selectedRenderable = renderableMap.get(key);
                         String name = product.getsuggestedProducts()[pos-2].getTitle().replace("_"," ");
                         productTitle.setText(toTitleCase(name));
                         idList = generateVariations(product.getsuggestedProducts()[pos-2]);
                     }
+                    Log.e("CHECK RENDERABLE",key);
                  }
                 if (footprintSelectionVisualizer  != null) {
 //                    selectionVisualiser.getMaterial().setFloat3("baseColorTint",
@@ -332,70 +338,12 @@ public class ARActivity extends AppCompatActivity {
                         Log.e("Changed Color","Changed Color");
                     }
                 }
-
             }
         });
 
 
     }
 
-
-    private void onUpdateFrame(FrameTime frameTime) {
-        if(!autoadded){
-            Frame frame = arFragment.getArSceneView().getArFrame();
-            if (frame != null) {
-                //get the trackables to ensure planes are detected
-                Iterator var3 = frame.getUpdatedTrackables(Plane.class).iterator();
-                while(var3.hasNext()) {
-                    Plane plane = (Plane)var3.next();
-
-                    //If a plane has been detected & is being tracked by ARCore
-                    if (plane.getTrackingState() == TrackingState.TRACKING) {
-
-                        //Hide the plane discovery helper animation
-                        arFragment.getPlaneDiscoveryController().hide();
-
-
-                        //Get all added anchors to the frame
-                        Iterator iterableAnchor = frame.getUpdatedAnchors().iterator();
-
-                        //place the first object only if no previous anchors were added
-                        if(!iterableAnchor.hasNext()) {
-                            //Perform a hit test at the center of the screen to place an object without tapping
-                            List<HitResult> hitTest = frame.hitTest(getScreenCenter().x, getScreenCenter().y);
-
-                            //iterate through all hits
-                            Iterator hitTestIterator = hitTest.iterator();
-                            while(hitTestIterator.hasNext()) {
-                                HitResult hitResult = (HitResult) hitTestIterator.next();
-
-                                //Create an anchor at the plane hit
-                                Anchor modelAnchor = plane.createAnchor(hitResult.getHitPose());
-
-                                //Attach a node to this anchor with the scene as the parent
-                                AnchorNode anchorNode = new AnchorNode(modelAnchor);
-                                anchorNode.setParent(arFragment.getArSceneView().getScene());
-
-                                //create a new TranformableNode that will carry our object
-                                TransformableNode transformableNode = new TransformableNode(arFragment.getTransformationSystem());
-                                transformableNode.setParent(anchorNode);
-                                transformableNode.setLocalScale(new Vector3(0.1f, 0.1f, 0.1f));
-                                transformableNode.setRenderable(ARActivity.this.selectedRenderable);
-
-                                //Alter the real world position to ensure object renders on the table top. Not somewhere inside.
-                                transformableNode.setWorldPosition(new Vector3(modelAnchor.getPose().tx(),
-                                        modelAnchor.getPose().compose(Pose.makeTranslation(0f, 0.05f, 0f)).ty(),
-                                        modelAnchor.getPose().tz()));
-
-                                autoadded = true;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-    }
 
     private int[] generateVariations(Product product){
         int eightDp = (int)convertDpToPixel(8,this);
@@ -484,7 +432,6 @@ public class ARActivity extends AppCompatActivity {
         for(Product variation : product.getsuggestedProducts()){
              list[i++] = variation.getTitle()+".png";
         }
-        Log.d("TESTING", Arrays.toString(list));
         return list;
     }
 
@@ -525,7 +472,7 @@ public class ARActivity extends AppCompatActivity {
         ModelRenderable.builder()
             .setSource(this, Uri.parse(URI))
             .build()
-            .thenAccept(renderable -> listOfRenderable.add(renderable))
+            .thenAccept(renderable -> renderableMap.put(URI.toString(),renderable))
             //.thenAccept(renderable -> selectedRenderable = renderable)
             .exceptionally(throwable -> {
                 Toast toast =
@@ -597,11 +544,32 @@ public class ARActivity extends AppCompatActivity {
     }
 
     public void fillColorMap(){
-        colorMap.put("Grey", "#FF898989");
+        colorMap.put("Blue", "#FF1a90eb");
         colorMap.put("Black","#FF000000");
         colorMap.put("White","#FFFFFFFF");
         colorMap.put("Purple","#FF8d32a8");
         colorMap.put("Red","#FFd9251e");
+    }
+
+    public void displayInstructions(){
+        Bitmap bg = Bitmap.createBitmap((int)deviceWidth, (int)deviceHeight, Bitmap.Config.ARGB_8888);
+        int[] pos = new int[2];
+        Canvas canvas = new Canvas(bg);
+        Paint paint = new Paint();
+        Paint transparentPaint = new Paint();
+        paint.setColor(0xcc000000);
+        transparentPaint.setColor(getResources().getColor(android.R.color.transparent));
+        transparentPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
+        arModelSelector.measure(
+                View.MeasureSpec.makeMeasureSpec(deviceWidth, View.MeasureSpec.EXACTLY),
+                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+        arModelSelector.getLocationOnScreen(pos);
+
+
+        canvas.drawColor(0x80000000);
+        canvas.drawRect(0,pos[1] - 75,deviceWidth,pos[1]+arModelSelector.getMeasuredHeight() - 70,transparentPaint); //manually adjusted
+        canvas.drawBitmap(bg, 0, 0, paint);
+        instructions2.setImageBitmap(bg);
     }
 
 }

@@ -3,7 +3,7 @@ package com.org.ardemo.objs;
 import android.net.Uri;
 
 
-public class CreateList {
+public class GalleryImageObj {
 
     private String image_title;
     private Integer image_id;

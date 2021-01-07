@@ -4,9 +4,11 @@ import android.content.Intent;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -38,12 +40,14 @@ import com.org.ardemo.objs.Product;
 
 import java.io.InputStream;
 
+import static com.org.ardemo.DemoUtils.convertDpToPixel;
 import static com.org.ardemo.DemoUtils.format;
+import static com.org.ardemo.SearchActivity.deviceHeight;
 import static com.org.ardemo.SearchActivity.deviceWidth;
 
 public class ViewProductActivity extends AppCompatActivity {
     MaterialButton chatNow, ar, addToCart, buyNow, returnPolicy, freeShipping, authentic;
-    ImageView img, arIcon;
+    ImageView img, arIcon, instructions;
     TextView title, discountValue, oldPrice, newPrice, itemsSold, fixedShopName;
     ToggleButton toggleDetails, toggleReviews, toggleDiscounts;
     ScrollView scrollView;
@@ -53,7 +57,7 @@ public class ViewProductActivity extends AppCompatActivity {
     ImageButton backTopButton, shareTopButton, moreTopButton;
     ViewPager2 viewPager;
     String[] nameList = new String[]{"Details","Reviews","Discounts"};
-
+    ConstraintLayout instructionPanel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -84,6 +88,8 @@ public class ViewProductActivity extends AppCompatActivity {
         shareTopButton = findViewById(R.id.shareTopButton);
         moreTopButton = findViewById(R.id.moreTopButton);
         bottomPanel = findViewById(R.id.bottomPanel);
+        instructions = findViewById(R.id.instructions);
+        instructionPanel = findViewById(R.id.instructionPanel);
 
         img.setScaleType(ImageView.ScaleType.CENTER_CROP);
         AssetManager assetManager = getAssets();
@@ -141,7 +147,12 @@ public class ViewProductActivity extends AppCompatActivity {
                 startActivity(myIntent);
             }
         });
-
+        instructionPanel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                instructionPanel.setVisibility(View.INVISIBLE);
+            }
+        });
         scrollView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
             @Override
             public void onScrollChanged() {
@@ -199,7 +210,8 @@ public class ViewProductActivity extends AppCompatActivity {
                             break;
                         case 2:
                             ProductDiscountsFragment f2 = (ProductDiscountsFragment) currentFragment;
-                            height = f2.getHeight();
+                            height = 10*f2.getHeight();
+
                             break;
                     }
                     RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
@@ -211,6 +223,12 @@ public class ViewProductActivity extends AppCompatActivity {
 
         });
 
+        instructions.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                displayInstructions();
+            }
+        });
     }
 
     @Override
@@ -230,6 +248,31 @@ public class ViewProductActivity extends AppCompatActivity {
     private ViewPagerAdapter createCardAdapter(Product product) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(this,product);
         return adapter;
+    }
+
+    private void displayInstructions(){
+
+        int[] pos1 = new int[2];
+        arIcon.measure(
+                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
+                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+        arIcon.getLocationOnScreen(pos1);
+
+        Bitmap bg = Bitmap.createBitmap((int)deviceWidth, (int)deviceHeight, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bg);
+        Paint paint = new Paint();
+        paint.setColor(0xcc000000);
+        Paint transparentPaint = new Paint();
+        transparentPaint.setColor(getResources().getColor(android.R.color.transparent));
+        transparentPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
+        int radius = (int)convertDpToPixel(20,ViewProductActivity.this);
+        canvas.drawColor(0x80000000);
+        float hBias = (pos1[0] + arIcon.getMeasuredWidth()/2.0f);
+        float vBias = (pos1[1] - arIcon.getMeasuredHeight()/2.0f);
+        canvas.drawCircle(hBias, vBias, radius, transparentPaint);
+        canvas.drawRect(0.25f*deviceWidth,0.92f*deviceHeight,0.5f*deviceWidth, deviceHeight, transparentPaint);
+        canvas.drawBitmap(bg, 0, 0, paint);
+        instructions.setImageBitmap(bg);
     }
 
 }

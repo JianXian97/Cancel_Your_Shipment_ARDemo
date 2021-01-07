@@ -19,14 +19,21 @@ import com.org.ardemo.objs.Product;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+
 import java.util.ArrayList;
+
+import static com.org.ardemo.DemoUtils.convertDpToPixel;
+import static com.org.ardemo.DemoUtils.cropToSquare;
 
 public class ViewImageActivity extends AppCompatActivity {
     ImageButton deleteButton, shareButton, backButton, openGalleryButton;
     ArrayList<Uri> imgUriList;
     Product product;
-    int position = 0;
+    Uri lastImage;
+    int pos = -1;
+    Boolean deleted = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -39,16 +46,32 @@ public class ViewImageActivity extends AppCompatActivity {
         ImageView imgView = findViewById(R.id.imageView);
         imgView.setImageURI(imageUri);
 
-
+        imgUriList = getImgUriList();
+        if(imgUriList.size()-1 > -1) {
+            lastImage = imgUriList.get(imgUriList.size()-1);
+        }
         deleteButton = findViewById(R.id.deleteButton);
         shareButton = findViewById(R.id.shareButton);
         backButton = findViewById(R.id.backButton);
         openGalleryButton = findViewById(R.id.openGallery);
+
+        int galleryButtonLength = (int)convertDpToPixel(50,ViewImageActivity.this);
+        if (lastImage != null && !lastImage.equals(Uri.EMPTY)){
+            File path =new File(imageUri.getPath());
+            try {
+                Bitmap image = BitmapFactory.decodeStream(new FileInputStream(path));
+                Bitmap croppedImage = cropToSquare(image);
+                openGalleryButton.setImageBitmap(Bitmap.createScaledBitmap(croppedImage, galleryButtonLength, galleryButtonLength, false));
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 File file = new File(imageUri.getPath());
                 file.delete();
+                pos = position;
                 finish();
 //                ArrayList<Uri> imgUriList = getImgUriList();
 //                Intent myIntent = new Intent(v.getContext(), GalleryActivity.class);
@@ -75,7 +98,6 @@ public class ViewImageActivity extends AppCompatActivity {
         openGalleryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                imgUriList = getImgUriList();
                 Intent myIntent = new Intent(ViewImageActivity.this, GalleryActivity.class);
                 myIntent.putParcelableArrayListExtra("imgUriList", imgUriList); //Optional parameters
                 myIntent.putExtra("product", product);
@@ -109,7 +131,8 @@ public class ViewImageActivity extends AppCompatActivity {
     @Override
     public void finish() {
         Intent returnIntent = new Intent();
-        returnIntent.putExtra("deletedPosition", position);
+
+        returnIntent.putExtra("deletedPosition", pos);
         // setResult(RESULT_OK);
         setResult(RESULT_OK, returnIntent); //By not passing the intent in the result, the calling activity will get null data.
         super.finish();
