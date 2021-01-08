@@ -114,6 +114,8 @@ public class ARActivity extends AppCompatActivity {
     ImageView instructions, instructions2;
     ConstraintLayout searchBar, instructionPanel, instructionPanel2;
     RecyclerView arModelSelector;
+    String modelName;
+    TransformableNode node;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -145,11 +147,8 @@ public class ARActivity extends AppCompatActivity {
             Anchor anchor = hitresult.createAnchor();
             AnchorNode anchorNode = new AnchorNode(anchor);
             anchorNode.setParent(arFragment.getArSceneView().getScene());
-            TransformableNode node = new TransformableNode(arFragment.getTransformationSystem());
-            node.getScaleController().setMaxScale(0.5001f);
-            node.getScaleController().setMinScale(0.5f);
+            node = new TransformableNode(arFragment.getTransformationSystem());
             node.setParent(anchorNode);
-            node.setLocalScale(new Vector3(0.1f, 0.1f, 0.1f));
             node.setRenderable(selectedRenderable);
             node.select();
             selectedAnchorNode = node;
@@ -281,35 +280,39 @@ public class ARActivity extends AppCompatActivity {
                     variationList.removeAllViews();
                 }
                 if(pos > 0){
-//                    selectedRenderable = listOfRenderable.get(pos-1);
-
                     productTitle.setVisibility(View.VISIBLE);
-                    String key;
+
                     if(pos == 1) {
-                        key = product.getTitle()+".sfb";
-                        selectedRenderable = renderableMap.get(key);
+                        modelName = product.getTitle()+".sfb";
+                        selectedRenderable = renderableMap.get(modelName);
                         productTitle.setText(product.getTitle());
                         idList = generateVariations(product);
-                        Log.e("Generated Variation", "Generated!");
-
                     }
                     else{
-                        key = product.getsuggestedProducts()[pos-2].getTitle()+".sfb";
-                        selectedRenderable = renderableMap.get(key);
+                        modelName = product.getsuggestedProducts()[pos-2].getTitle()+".sfb";
+                        selectedRenderable = renderableMap.get(modelName);
                         String name = product.getsuggestedProducts()[pos-2].getTitle().replace("_"," ");
                         productTitle.setText(toTitleCase(name));
                         idList = generateVariations(product.getsuggestedProducts()[pos-2]);
                     }
-                    Log.e("CHECK RENDERABLE",key);
                  }
                 if (footprintSelectionVisualizer  != null) {
-//                    selectionVisualiser.getMaterial().setFloat3("baseColorTint",
-//                            new Color(android.graphics.Color.parseColor("#DC593B")));
+
                     if(selectionVisualiser!=null) {
                         selectionVisualiser.setHorizontalAlignment(ViewRenderable.HorizontalAlignment.CENTER);
                         selectionVisualiser.setVerticalAlignment(ViewRenderable.VerticalAlignment.CENTER);
 
                         footprintSelectionVisualizer.setFootprintRenderable(selectionVisualiser);
+                    }
+                }
+                if(node != null){
+                    if(modelName.equals("efit 10.sfb")) {
+                        node.getScaleController().setMaxScale(1.001f);
+                        node.getScaleController().setMinScale(1.0f);
+                    }
+                    else{
+                        node.getScaleController().setMaxScale(0.5001f);
+                        node.getScaleController().setMinScale(0.5f);
                     }
                 }
             }

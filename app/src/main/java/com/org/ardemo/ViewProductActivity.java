@@ -54,7 +54,7 @@ public class ViewProductActivity extends AppCompatActivity {
     ConstraintLayout fixedTopPanel, bottomPanel;
     View fixedTopPanelBackground;
     RatingStarView shopRating;
-    ImageButton backTopButton, shareTopButton, moreTopButton;
+    ImageButton backTopButton, shareTopButton, moreTopButton, cartTopButton;
     ViewPager2 viewPager;
     String[] nameList = new String[]{"Details","Reviews","Discounts"};
     ConstraintLayout instructionPanel;
@@ -86,6 +86,7 @@ public class ViewProductActivity extends AppCompatActivity {
         scrollView = findViewById(R.id.scrollView);
         backTopButton = findViewById(R.id.backTopButton);
         shareTopButton = findViewById(R.id.shareTopButton);
+        cartTopButton = findViewById(R.id.cartTopButton);
         moreTopButton = findViewById(R.id.moreTopButton);
         bottomPanel = findViewById(R.id.bottomPanel);
         instructions = findViewById(R.id.instructions);
@@ -167,11 +168,13 @@ public class ViewProductActivity extends AppCompatActivity {
                 backTopButton.getDrawable().setColorFilter(newColor, PorterDuff.Mode.SRC_ATOP);
                 shareTopButton.getDrawable().setColorFilter(newColor, PorterDuff.Mode.SRC_ATOP);
                 moreTopButton.getDrawable().setColorFilter(newColor, PorterDuff.Mode.SRC_ATOP);
+                cartTopButton.getDrawable().setColorFilter(newColor, PorterDuff.Mode.SRC_ATOP);
                 double gradient = 38.25/500;
                 newColor = Color.argb((int)(38.25 - gradient*scrollY),0,0,0);
                 backTopButton.setBackground(drawCircle(newColor));
                 shareTopButton.setBackground(drawCircle(newColor));
                 moreTopButton.setBackground(drawCircle(newColor));
+                cartTopButton.setBackground(drawCircle(newColor));
             }
         });
         viewPager = findViewById(R.id.productInfo);
@@ -265,10 +268,10 @@ public class ViewProductActivity extends AppCompatActivity {
         Paint transparentPaint = new Paint();
         transparentPaint.setColor(getResources().getColor(android.R.color.transparent));
         transparentPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
-        int radius = (int)convertDpToPixel(20,ViewProductActivity.this);
+        int radius = (int)convertDpToPixel(30,ViewProductActivity.this);
         canvas.drawColor(0x80000000);
-        float hBias = (pos1[0] + arIcon.getMeasuredWidth()/2.0f);
-        float vBias = (pos1[1] - arIcon.getMeasuredHeight()/2.0f);
+        float hBias = (pos1[0] + arIcon.getMeasuredWidth()/2.0f + 25); //manually adjusted
+        float vBias = (pos1[1] - arIcon.getMeasuredHeight()/2.0f + 45);
         canvas.drawCircle(hBias, vBias, radius, transparentPaint);
         canvas.drawRect(0.25f*deviceWidth,0.92f*deviceHeight,0.5f*deviceWidth, deviceHeight, transparentPaint);
         canvas.drawBitmap(bg, 0, 0, paint);

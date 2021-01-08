@@ -56,6 +56,19 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_bias="0.71"
+            android:src="@drawable/ic_baseline_share_24"
+            android:background="@drawable/round_button"
+            android:tint="#fff"/>
+
+        <ImageButton
+            android:id="@+id/cartTopButton"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_bias="0.85"
             android:src="@drawable/ic_baseline_shopping_cart_24"
             android:background="@drawable/round_button"
@@ -103,7 +116,7 @@
                 app:layout_constraintTop_toBottomOf="@id/image"
                 app:layout_constraintStart_toStartOf="parent"
                 android:layout_marginStart="8dp"
-                android:textSize="15dp"
+                android:textSize="25sp"
                 android:textColor="#000"/>
             <TextView
                 android:id="@+id/discountValue"
@@ -171,22 +184,27 @@
 
             <ImageView
                 android:id="@+id/arIcon"
-                android:layout_width="wrap_content"
-                android:layout_height="15dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:src="@drawable/ic_ar_icon"
-                app:layout_constraintHorizontal_bias="0.85"
-                app:layout_constraintTop_toTopOf="@id/itemsSold"
-                app:layout_constraintBottom_toBottomOf="@id/itemsSold"
-                app:layout_constraintEnd_toStartOf="@id/heartIcon"
-                app:tint="#828282" />
+                android:background="@drawable/round_button"
+                android:backgroundTint="#70000000"
+                app:layout_constraintHorizontal_bias="0.99"
+                app:layout_constraintTop_toTopOf="@id/image"
+                app:layout_constraintBottom_toBottomOf="@id/image"
+                app:layout_constraintVertical_bias="0.9"
+                app:layout_constraintStart_toStartOf="@id/image"
+                app:layout_constraintEnd_toEndOf="@id/image"
+                android:padding="4dp"
+                app:tint="#ffffff" />
 
             <ImageView
                 android:id="@+id/heartIcon"
                 android:layout_width="wrap_content"
-                android:layout_height="10dp"
+                android:layout_height="15dp"
                 android:src="@drawable/ic_heart_icon"
-                app:layout_constraintTop_toTopOf="@id/arIcon"
-                app:layout_constraintBottom_toBottomOf="@id/arIcon"
+                app:layout_constraintTop_toTopOf="@id/itemsSold"
+                app:layout_constraintBottom_toBottomOf="@id/itemsSold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.95"
                 app:layout_constraintStart_toStartOf="parent"
@@ -205,7 +223,7 @@
                 android:backgroundTint="#00000000"
                 android:text="15 Days Return\*"
                 android:textColor="#898989"
-                android:textSize="8.5sp"
+                android:textSize="8sp"
                 android:minHeight="0dp"
                 android:padding="-7dp"
                 android:drawableLeft="@drawable/ic_resource_return"

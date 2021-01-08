@@ -68,3 +68,7 @@ sceneform.asset('sampledata/High Top Chair.obj',
         'sampledata/High Top Chair.sfa',
         'src/main/assets/High Top Chair')
 
+sceneform.asset('sampledata/efit 10.obj',
+        'default',
+        'sampledata/efit 10.sfa',
+        'src/main/assets/efit 10')

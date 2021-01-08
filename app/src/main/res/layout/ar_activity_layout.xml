@@ -56,7 +56,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.9" />
+        app:layout_constraintVertical_bias="0.98" />
 
     <ImageButton
         android:id="@+id/takeImage"
@@ -76,7 +76,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/arModelSelector"
+        app:layout_constraintBottom_toTopOf="@id/variationList"
         android:textColor="#fff"
         android:background="#50898989"
         android:textSize="15sp"
@@ -89,7 +89,8 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:background="@drawable/round_button_border_thin"
-
+        android:tint="@color/shopeeOrange"
+        android:backgroundTint="@color/shopeeOrange"
         android:layout_marginTop="10dp"
         android:src="@drawable/ic_baseline_add_shopping_cart_24"
         app:layout_constraintTop_toBottomOf="@id/removeButton"
@@ -98,7 +99,7 @@
         android:id="@+id/variationList"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/arModelSelector"
+        app:layout_constraintBottom_toTopOf="@id/arModelSelector"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         />
@@ -156,11 +157,11 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintWidth_percent="0.5"
-            app:layout_constraintVertical_bias="0.6"
+            app:layout_constraintWidth_percent="0.8"
+            app:layout_constraintVertical_bias="0.8"
             android:textAlignment="center"
             android:textSize="20dp"
-            android:text="Swipe to view similar products\nClick the middle button to take a photo"/>
+            android:text="Select variations or swipe to view similar products\n\nClick the middle button to take a photo"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

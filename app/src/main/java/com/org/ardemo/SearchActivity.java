@@ -72,10 +72,12 @@ public class SearchActivity extends AppCompatActivity{
         Review reviewC = new Review("loremipsum.txt","Bob Lim", "reviewerC.png", "Shiny", new String[]{"reviewC_1.png","reviewC_2.png","reviewC_3.png"},4.6,new GregorianCalendar(2020, 12, 28).getTime());
         Review reviewD = new Review("loremipsum.txt","John Doe", "reviewerD.png", "Cool", new String[]{"reviewD_1.png"},2.5,new GregorianCalendar(2020, 12, 2).getTime());
 
+
         Product productD = new Product("CHAHIN_WOODEN_CHAIR", filelist[3], "HOUSE",342.00, 184.50, true, false, 3.0f,100, 25,true, new Product[]{}, new String[]{"Brown","Blue"},new Review[]{}, shopA);
         Product productE = new Product("High Top Chair", filelist[4], "HOUSE",392.00, 300.00, true, false, 3.0f,850, 35,true, new Product[]{}, new String[]{"Black","White"},new Review[]{}, shopA);
+        Product productF = new Product("Chair", filelist[5], "HOUSE",602.00, 568.30, true, false, 5.0f,760, 205,true, new Product[]{}, new String[]{"Green","White","Purple"},new Review[]{}, shopA);
         Product productA = new Product("Earth", filelist[1], "Citylife",211.60, 65.70, true, false, 4.0f,2930, 406,true, new Product[]{}, new String[]{"Green","Red"}, new Review[]{reviewB, reviewC}, shopB);
-        Product productB = new Product("Chair", filelist[0], "HOUSE",86.80, 5.90, true, false, 3.0f,360, 65,true, new Product[]{productD,productE}, new String[]{"Green","White","Purple"},new Review[]{reviewA}, shopA);
+        Product productB = new Product("efit 10", filelist[0], "HOUSE",86.80, 5.90, true, false, 3.0f,360, 65,true, new Product[]{productD,productE,productF}, new String[]{"Silver","Blue"},new Review[]{reviewA}, shopA);
         Product productC = new Product("Paper Airplane", filelist[2], "Best Shop",2.00, 0.99, false, true, 5.0f,1999, 23,true, new Product[]{}, new String[]{"White","Black"}, new Review[]{reviewD}, shopC);
 
 
@@ -203,7 +205,7 @@ public class SearchActivity extends AppCompatActivity{
                 View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
         canvas.drawColor(0x80000000);
         canvas.drawRect(0,0,deviceWidth,searchBar.getMeasuredHeight(),transparentPaint);
-        canvas.drawRect(pos[0],pos[1] - 75,pos[0] + child1.panel.getMeasuredWidth()+20,pos[1] + child1.panel.getMeasuredHeight() - 80,transparentPaint); //manually adjusted
+        canvas.drawRect(pos[0],pos[1] - 75,pos[0] + child1.panel.getMeasuredWidth() - 25,pos[1] + child1.panel.getMeasuredHeight() - 80,transparentPaint); //manually adjusted
         canvas.drawBitmap(bg, 0, 0, paint);
         instructions2.setImageBitmap(bg);
         Log.d("TEST","TESTing123");
