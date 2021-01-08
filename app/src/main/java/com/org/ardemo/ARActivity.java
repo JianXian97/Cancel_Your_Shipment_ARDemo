@@ -149,6 +149,14 @@ public class ARActivity extends AppCompatActivity {
             anchorNode.setParent(arFragment.getArSceneView().getScene());
             node = new TransformableNode(arFragment.getTransformationSystem());
             node.setParent(anchorNode);
+            if(modelName.equals("efit 10.sfb")) {
+                node.getScaleController().setMaxScale(1.0001f);
+                node.getScaleController().setMinScale(1.0f);
+            }
+            else{
+                node.getScaleController().setMaxScale(0.5001f);
+                node.getScaleController().setMinScale(0.5f);
+            }
             node.setRenderable(selectedRenderable);
             node.select();
             selectedAnchorNode = node;
@@ -307,7 +315,7 @@ public class ARActivity extends AppCompatActivity {
                 }
                 if(node != null){
                     if(modelName.equals("efit 10.sfb")) {
-                        node.getScaleController().setMaxScale(1.001f);
+                        node.getScaleController().setMaxScale(1.0001f);
                         node.getScaleController().setMinScale(1.0f);
                     }
                     else{
